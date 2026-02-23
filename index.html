@@ -10,6 +10,65 @@ html {
     scroll-behavior: smooth;
 }
 
+        /* 인트로 스플래시 화면 스타일 */
+        #intro-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                        url('https://i.ibb.co/이미지주소.jpg') no-repeat center/cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999; /* 모든 요소보다 위에 배치 */
+            color: white;
+            text-align: center;
+            transition: opacity 0.5s ease;
+        }
+
+        .intro-content h2 {
+            font-size: 2.2rem;
+            color: #FF007A;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .intro-content p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .enter-btn {
+            background: #FF007A;
+            color: white;
+            padding: 15px 40px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border-radius: 50px;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 4px 15px rgba(255, 0, 122, 0.4);
+            animation: pulse 2s infinite; /* 버튼 깜빡임 효과 */
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* 인트로가 사라질 때 사용하는 클래스 */
+        .hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        
 /* 혜택 아이템에 클릭 가능 표시 추가 */
 .benefit-item { 
     /* ... 기존 코드 생략 ... */
@@ -133,10 +192,19 @@ html {
 </head>
 <body>
 
+    <div id="intro-overlay">
+        <div class="intro-content">
+            <p>LG U+ 공식 파트너 주식회사 마루모바일</p>
+            <h2>쓰던폰 그대로<br>20만원 즉시 지급!</h2>
+            <p>대한민국 어디서나 개통 가능<br>추가적인 혜택이 궁금하십니까?</p>
+            <button class="enter-btn" onclick="closeIntro()">네, 혜택 확인하기</button>
+        </div>
+    </div>
+    
     <header>
         <div class="container">
             <h1>LG U+ 공식 파트너</h1>
-            <p>주식회사 마루모바일에 방문해주셔서 감사합니다</p>
+            <p>주식회사 마루모바일 페이지에 방문해주셔서 감사합니다</p>
             <p>Click 한 번 만으로 간편 상담 가능</p>
         </div>
     </header>
@@ -216,9 +284,9 @@ html {
                     <div class="input-group">
                         <label>관심 상품</label>
                         <select id="interest">
-                            <option value="combined">인터넷 + TV + 휴대폰 결합</option>
-                            <option value="internet">인터넷 + TV</option>
-                            <option value="only-internet">인터넷 단독</option>
+                            <option value="combined">휴대폰</option>
+                            <option value="internet">인터넷</option>
+                            <option value="only-internet">인터넷TV</option>
                             <option value="etc">기타 문의</option>
                         </select>
                     </div>
@@ -237,22 +305,32 @@ html {
         <div class="container">
             <h2>실제 개통 후기</h2>
             <div class="review">
-                "상담도 너무 친절하시고 약속한 당일에 바로 설치해주셨어요. 사은품도 바로 입금됐네요!" - 죽도동 이OO 고객님
+                "상담도 너무 친절하시고 약속한 당일에 바로 설치해주셨어요. 사은품도 바로 입금됐네요!" - 범계동 이OO 고객님
             </div>
             <div class="review">
-                "결합 할인 복잡했는데 딱 맞는 상품으로 추천해주셔서 통신비가 많이 줄었습니다." - 양덕동 박OO 고객님
+                "결합 할인 복잡했는데 딱 맞는 상품으로 추천해주셔서 통신비가 많이 줄었습니다." - 중앙동 박OO 고객님
             </div>
         </div>
     </section>
 
     <footer>
-        <p>© 2026 LG유플러스 강남영업연구소 | 사업자번호: 220-81-39938</p>
+        <p>© 2026 LG유플러스 공식 파트너 주식회사 마루모바일 | 사업자번호: 000-00-00000</p>
     </footer>
 
     <a href="tel:010-8080-3053" class="floating-cta">
         지금 바로 전화 상담하기 (클릭)
     </a>
 <script>
+        // [여기에 붙여넣으세요!] 인트로 닫기 기능
+        function closeIntro() {
+            const intro = document.getElementById('intro-overlay');
+            intro.classList.add('hidden'); // 서서히 투명해지는 효과
+            
+            setTimeout(() => {
+                intro.style.display = 'none'; // 0.5초 후 화면에서 아예 제거
+            }, 500);
+        }
+
 document.getElementById('consultationForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const name = document.getElementById('userName').value;
@@ -282,6 +360,7 @@ document.getElementById('consultationForm').addEventListener('submit', function(
 </body>
 
 </html>
+
 
 
 
