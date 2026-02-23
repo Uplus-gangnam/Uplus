@@ -5,6 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LG유플러스 공식 파트너 주식회사 마루모바일</title>
     <style>
+      /* 7. U+ 고객 사전 등록 섹션 (강화 버전) */
+#qr-registration { background: #f9f9f9; padding: 80px 20px; }
+
+.qr-box { 
+    background: white; 
+    padding: 40px; 
+    border-radius: 30px; /* 좀 더 둥글게 */
+    box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+    display: inline-block;
+    position: relative; /* 뱃지 배치를 위해 */
+}
+
+/* 사은품 강조 뱃지 */
+.bonus-badge {
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    background: #FF007A;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-weight: bold;
+    font-size: 1rem;
+    box-shadow: 0 5px 15px rgba(255, 0, 122, 0.4);
+    animation: bounce 2s infinite; /* 통통 튀는 효과 */
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.qr-box h2 { color: #333; margin-bottom: 5px; font-size: 1.8rem; }
+.qr-box .sub-title { color: #FF007A; font-weight: bold; margin-bottom: 20px; font-size: 1.2rem; }
+.qr-box p { color: #666; margin-bottom: 25px; line-height: 1.6; }
+
+.qr-image-wrapper {
+    display: inline-block;
+    padding: 15px;
+    border: 3px solid #FF007A;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    background: #fff;
+    cursor: pointer;
+}
+
+.qr-image-wrapper:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(255, 0, 122, 0.2);
+}
+
+.qr-image-wrapper img {
+    width: 220px;
+    height: 220px;
+    display: block;
+}
+
+.qr-hint {
+    margin-top: 15px;
+    font-size: 0.9rem;
+    color: #666;
+    background: #eee;
+    padding: 5px 15px;
+    border-radius: 50px;
+    display: inline-block;
+}    
         /* 페이지 전체에 부드러운 스크롤 적용 */
         html {
             scroll-behavior: smooth;
@@ -312,6 +378,27 @@
             </table>
         </div>
     </section>
+
+<section id="qr-registration">
+    <div class="container">
+        <div class="qr-box">
+            <div class="bonus-badge">🎁 등록 시 사은품 100% 증정!</div>
+
+            <h2>📲 U+ 고객 사전 등록</h2>
+            <p class="sub-title">공식 상담을 위한 필수 단계</p>
+            <p>신속하고 정확한 상담을 위해 고객 등록이 필요합니다.<br>
+            아래 QR을 통해 등록하시면 <strong>추가 지원금 혜택</strong>을 드립니다.</p>
+            
+            <a href="https://ucrm.lguplus.co.kr/mbl/v2/rcmd/moveInfo?param=bWFydTczNDAmMjAyNjAyMjMwNDM0NDAmUVJDRF8%3D" target="_blank" class="qr-image-wrapper">
+                <img src="https://i.ibb.co/RGxzMw8s/21o-Sr.jpg" alt="U+ 고객 사전 등록 QR코드">
+            </a>
+            
+            <br>
+            <p class="qr-hint">이미지를 클릭하거나 QR을 스캔하세요</p>
+        </div>
+    </div>
+</section>
+    
 <section id="contact-form">
         <div class="container">
             <div class="form-container">
@@ -409,5 +496,6 @@ document.getElementById('consultationForm').addEventListener('submit', function(
 </body>
 
 </html>
+
 
 
