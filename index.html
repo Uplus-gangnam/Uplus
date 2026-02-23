@@ -6,19 +6,18 @@
     <title>LG유플러스 공식 파트너 주식회사 마루모바일</title>
     <style>
         /* 페이지 전체에 부드러운 스크롤 적용 */
-html {
-    scroll-behavior: smooth;
-}
+        html {
+            scroll-behavior: smooth;
+        }
 
-        /* 인트로 스플래시 화면 스타일 */
+        /* [수정됨] 인트로 스플래시 화면 스타일 */
         #intro-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
-                        url('https://i.ibb.co/이미지주소.jpg') no-repeat center/cover;
+            /* 기존 background 속성 제거됨 */
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -27,6 +26,38 @@ html {
             color: white;
             text-align: center;
             transition: opacity 0.5s ease;
+            overflow: hidden; /* 비디오가 영역 밖으로 나가는 것 방지 */
+        }
+
+        /* [추가됨] 배경 비디오 스타일 */
+        #intro-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translate(-50%, -50%); /* 중앙 정렬 */
+            object-fit: cover; /* 화면 비율 유지하며 꽉 채움 */
+            z-index: -2; /* 가장 뒤로 보냄 */
+        }
+
+        /* [추가됨] 비디오 위 반투명 오버레이 스타일 */
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6); /* 60% 어둡게 하여 글자 가독성 확보 */
+            z-index: -1; /* 비디오보다 앞, 콘텐츠보다 뒤 */
+        }
+
+        /* [수정됨] 인트로 콘텐츠가 영상 위에 오도록 설정 */
+        .intro-content {
+            z-index: 1;
+            position: relative; /* z-index 적용을 위해 */
         }
 
         .intro-content h2 {
@@ -113,6 +144,14 @@ html {
             transform: translateY(-8px); /* 위로 살짝 뜨는 효과 */
             box-shadow: 0 15px 30px rgba(255, 0, 122, 0.15); /* 유플러스 핑크빛 그림자 */
         }
+        
+        /* 혜택 그리드 레이아웃 추가 */
+        .benefit-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
 
         /* 3. 상세 설명 (요금표) */
         table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
@@ -193,6 +232,13 @@ html {
 <body>
 
     <div id="intro-overlay">
+        <video autoplay muted loop playsinline poster="경로/video-placeholder.jpg" id="intro-video">
+            <source src="경로/your-video-file.mp4" type="video/mp4">
+            브라우저가 이 동영상을 지원하지 않습니다.
+        </video>
+
+        <div class="video-overlay"></div>
+
         <div class="intro-content">
             <p>LG U+ 공식 파트너 주식회사 마루모바일</p>
             <h2>쓰던폰 그대로<br>20만원 즉시 지급!</h2>
@@ -250,7 +296,7 @@ html {
                 </tr>
                 <tr>
                     <td>5G 미니</td>
-                    <td>7G+400Kb 무제한/td>
+                    <td>7G+400Kb 무제한</td>
                     <td>24,750원</td>
                 </tr>
                 <tr>
@@ -321,12 +367,15 @@ html {
         지금 바로 전화 상담하기 (클릭)
     </a>
 <script>
-        // [여기에 붙여넣으세요!] 인트로 닫기 기능
+        // [수정됨] 인트로 닫기 기능 (비디오 정지 기능 추가)
         function closeIntro() {
             const intro = document.getElementById('intro-overlay');
             intro.classList.add('hidden'); // 서서히 투명해지는 효과
             
+            // 인트로가 사라진 후 비디오 재생을 멈춰 리소스 절약
             setTimeout(() => {
+                const video = document.getElementById('intro-video');
+                if (video) video.pause();
                 intro.style.display = 'none'; // 0.5초 후 화면에서 아예 제거
             }, 500);
         }
@@ -360,14 +409,3 @@ document.getElementById('consultationForm').addEventListener('submit', function(
 </body>
 
 </html>
-
-
-
-
-
-
-
-
-
-
-
