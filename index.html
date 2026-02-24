@@ -305,16 +305,30 @@
     <a href="tel:010-8080-3053" class="floating-cta">지금 바로 전화 상담하기 (클릭)</a>
 
     <script>
-        // 1. 인트로 닫기
-        function closeIntro() {
-            const intro = document.getElementById('intro-overlay');
-            intro.classList.add('hidden');
-            setTimeout(() => {
-                const video = document.getElementById('intro-video');
-                if (video) video.pause();
-                intro.style.display = 'none';
-            }, 500);
-        }
+// 인트로 닫기 기능 수정
+function closeIntro() {
+    const intro = document.getElementById('intro-overlay');
+    
+    // 1. 인트로 투명하게 만들기
+    intro.classList.add('hidden'); 
+    
+    // 2. [추가] 입장 버튼을 누르는 순간 즉시 페이지 최상단으로 강제 이동
+    window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'instant' // 부드러운 효과 없이 즉시 이동하여 위치 오류 방지
+    });
+    
+    // 3. 인트로가 사라진 후 리소스 정리
+    setTimeout(() => {
+        const video = document.getElementById('intro-video');
+        if (video) video.pause();
+        intro.style.display = 'none';
+        
+        // 혹시 모를 오차를 위해 제거 후 한 번 더 최상단 확인
+        document.documentElement.scrollTop = 0;
+    }, 500);
+}
 
         // 2. 날짜 자동 업데이트 (오늘 날짜 반영)
         function updateTodayDate() {
@@ -349,6 +363,7 @@
     </script>
 </body>
 </html>
+
 
 
 
