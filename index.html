@@ -4,12 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>LG유플러스 공식 파트너 주식회사 마루모바일</title>
+    <!-- Firebase SDK 로드 (가장 편리한 상담 데이터 저장 방식) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+        // 시스템 제공 환경 변수 로드
+        const firebaseConfig = JSON.parse(__firebase_config);
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'maru-mobile';
+
+        // 전역 객체에 필요한 기능 할당
+        window.maruDB = { db, collection, addDoc, serverTimestamp, auth, signInAnonymously, appId };
+        
+        // 익명 인증 실행
+        signInAnonymously(auth).catch((error) => console.error("Firebase 인증 실패:", error));
+    </script>
     <style>
         /* 1. 기본 스타일 및 레이아웃 최적화 */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         html, body { 
             margin: 0; padding: 0; width: 100%; 
-            overflow-x: hidden; /* 가로 스크롤 절대 방지 */
+            overflow-x: hidden; 
             font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif; 
             line-height: 1.6; color: #333; 
             word-break: keep-all; 
@@ -20,6 +39,7 @@
 
         @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
         @keyframes shine { from { left: -100%; } to { left: 150%; } }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 
         /* 2. 인트로 스플래시 */
         #intro-overlay {
@@ -49,7 +69,7 @@
         }
         header h1 { font-size: 2.4rem; color: #FF007A; margin: 0; line-height: 1.2; }
 
-        /* 4. 오늘의 특가 정렬 보정 (콤팩트한 디자인) */
+        /* 4. 오늘의 특가 (콤팩트 중앙 정렬) */
         #daily-special { background: linear-gradient(to bottom, #ffffff, #fff5f8); }
         .special-container { display: flex; flex-direction: column; gap: 20px; width: 100%; max-width: 700px; align-items: center; }
         .special-card {
@@ -66,30 +86,30 @@
             box-shadow: 0 10px 25px rgba(255, 0, 122, 0.15);
         }
         .special-img-box { 
-            width: 180px; height: 180px; flex-shrink: 0; background: #f9f9f9; 
-            padding: 20px; border-right: 1px solid #eee; display: flex; 
+            width: 160px; height: 160px; flex-shrink: 0; background: #f9f9f9; 
+            padding: 15px; border-right: 1px solid #eee; display: flex; 
             justify-content: center; align-items: center; 
         }
         .special-img-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
         .special-info-box { 
-            flex: 1; padding: 20px 30px; text-align: left; 
+            flex: 1; padding: 15px 25px; text-align: left; 
             display: flex; flex-direction: column; justify-content: center; 
         }
-        .model-name { font-size: 1.4rem; font-weight: bold; color: #333; margin-bottom: 5px; }
-        .price-tag { font-size: 1.7rem; font-weight: 900; color: #FF007A; margin-bottom: 12px; line-height: 1.2; }
-        .price-tag span { font-size: 0.95rem; color: #999; text-decoration: line-through; font-weight: normal; margin-right: 8px; }
-        .card-cta-btn { align-self: flex-start; background: #333; color: white; padding: 8px 20px; border-radius: 8px; font-size: 0.9rem; font-weight: bold; transition: 0.3s; }
+        .model-name { font-size: 1.3rem; font-weight: bold; color: #333; margin-bottom: 5px; }
+        .price-tag { font-size: 1.6rem; font-weight: 900; color: #FF007A; margin-bottom: 8px; line-height: 1.2; }
+        .price-tag span { font-size: 0.9rem; color: #999; text-decoration: line-through; font-weight: normal; margin-right: 8px; }
+        .card-cta-btn { align-self: flex-start; background: #333; color: white; padding: 8px 16px; border-radius: 6px; font-size: 0.85rem; font-weight: bold; transition: 0.3s; }
         .special-card:hover .card-cta-btn { background: #FF007A; }
 
         @media (max-width: 600px) {
-            header h1 { font-size: 1.8rem; }
             .special-card { flex-direction: column; }
-            .special-img-box { width: 100%; height: 200px; border-right: none; border-bottom: 1px solid #eee; }
-            .special-info-box { text-align: center; padding: 25px 20px; width: 100%; align-items: center; }
-            .card-cta-btn { align-self: center; width: 100%; }
+            .special-img-box { width: 100%; height: 180px; border-right: none; border-bottom: 1px solid #eee; }
+            .special-info-box { text-align: center; padding: 20px; width: 100%; align-items: center; }
+            .card-cta-btn { align-self: center; width: 100%; text-align: center; }
         }
 
-        /* 5. 주요 혜택 그리드 정렬 */
+        /* 5. 주요 혜택 섹션 */
+        #benefits { background: #fff; }
         .benefit-grid { 
             display: grid; 
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); 
@@ -99,39 +119,69 @@
         }
         .benefit-item { 
             background: white; padding: 30px; border-radius: 20px; 
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05); transition: 0.3s; 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.04); transition: 0.3s; 
             text-decoration: none; color: inherit; display: flex; 
             flex-direction: column; align-items: center; 
             border-bottom: 4px solid #eee; height: 100%;
         }
         .benefit-item:hover { transform: translateY(-10px); border-color: #FF007A; box-shadow: 0 15px 30px rgba(255, 0, 122, 0.1); }
         .benefit-item h3 { margin-top: 0; color: #FF007A; font-size: 1.2rem; }
+        .benefit-item p { font-size: 0.95rem; color: #666; margin: 10px 0 0; }
 
-        /* 6. 상담 신청 및 개인정보 고지 */
-        .form-container { width: 100%; max-width: 500px; margin: 0 auto; padding: 40px 25px; border: 2px solid #FF007A; border-radius: 25px; background: white; box-shadow: 0 15px 35px rgba(255, 0, 122, 0.08); }
-        .input-group { text-align: left; margin-bottom: 18px; }
-        .input-group label { font-weight: bold; display: block; margin-bottom: 6px; font-size: 0.9rem; color: #555; }
-        .input-group input, .input-group select { width: 100%; padding: 14px; border: 1px solid #ddd; border-radius: 10px; font-size: 1rem; box-sizing: border-box; outline: none; }
+        /* 6. QR 등록 섹션 (3개 박스 구성) */
+        #qr-registration { background: #f9f9f9; }
+        .qr-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .qr-box { 
+            background: white; padding: 35px 20px; border-radius: 25px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.04); 
+            position: relative; transition: 0.3s;
+            border: 1px solid #eee;
+        }
+        .qr-box:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(255, 0, 122, 0.08); }
+        .qr-box h3 { font-size: 1.1rem; margin-bottom: 10px; color: #333; }
+        .qr-box p { font-size: 0.85rem; color: #777; margin-bottom: 20px; height: 40px; display: flex; align-items: center; justify-content: center; }
+        
+        .qr-link-btn { display: inline-block; padding: 0; background: none; border: none; transition: 0.3s; }
+        .qr-link-btn:hover { transform: scale(1.1); opacity: 0.9; }
+        .qr-link-btn img { width: 140px; height: 140px; display: block; object-fit: contain; }
+        
+        .bonus-badge { 
+            position: absolute; top: -12px; right: 10px; background: #FF007A; 
+            color: white; padding: 5px 12px; border-radius: 50px; 
+            font-weight: bold; animation: bounce 2s infinite; font-size: 0.75rem; 
+            box-shadow: 0 4px 10px rgba(255, 0, 122, 0.3); 
+        }
+
+        /* 7. 상담 신청 및 메시지 박스 */
+        .form-container { width: 100%; max-width: 500px; margin: 0 auto; padding: 40px 25px; border: 2px solid #FF007A; border-radius: 25px; background: white; box-shadow: 0 15px 35px rgba(255, 0, 122, 0.08); position: relative; }
+        .input-group { text-align: left; margin-bottom: 15px; }
+        .input-group label { font-weight: bold; display: block; margin-bottom: 5px; font-size: 0.9rem; color: #555; }
+        .input-group input, .input-group select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; font-size: 1rem; box-sizing: border-box; outline: none; }
         
         .privacy-notice-box {
-            width: 100%; height: 110px; overflow-y: scroll; background: #f9f9f9; border: 1px solid #eee; 
-            border-radius: 10px; padding: 12px; font-size: 0.8rem; color: #777; text-align: left; margin-bottom: 12px;
-            line-height: 1.6;
+            width: 100%; height: 100px; overflow-y: scroll; background: #f9f9f9; border: 1px solid #eee; 
+            border-radius: 10px; padding: 10px; font-size: 0.75rem; color: #777; text-align: left; margin-bottom: 12px;
+            line-height: 1.5;
         }
-        .privacy-check { text-align: left; margin-bottom: 25px; display: flex; align-items: center; cursor: pointer; justify-content: center; }
-        .privacy-check input { width: 20px; height: 20px; margin-right: 12px; cursor: pointer; accent-color: #FF007A; }
-        .privacy-check label { font-size: 0.95rem; font-weight: bold; cursor: pointer; color: #333; }
+        .privacy-check { text-align: left; margin-bottom: 20px; display: flex; align-items: center; cursor: pointer; justify-content: center; }
+        .privacy-check input { width: 18px; height: 18px; margin-right: 10px; cursor: pointer; accent-color: #FF007A; }
+        .privacy-check label { font-size: 0.85rem; font-weight: bold; cursor: pointer; color: #333; }
 
-        /* 7. 기타 */
-        #qr-registration { background: #f9f9f9; }
-        .qr-box { background: white; padding: 45px 30px; border-radius: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.06); display: inline-block; position: relative; max-width: 100%; }
-        .bonus-badge { position: absolute; top: -15px; right: 20px; background: #FF007A; color: white; padding: 8px 18px; border-radius: 50px; font-weight: bold; animation: bounce 2s infinite; }
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-        
-        .qr-link-btn { display: inline-block; border: 2.5px solid #FF007A; border-radius: 20px; padding: 12px; background: #fff; transition: 0.3s; }
+        #form-message {
+            display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.95); z-index: 10; border-radius: 25px;
+            flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px;
+        }
 
-        .floating-cta { position: fixed; bottom: 0; left: 0; width: 100%; background: #FF007A; color: white; text-align: center; padding: 20px; font-size: 1.1rem; font-weight: bold; text-decoration: none; z-index: 1000; display: flex; align-items: center; justify-content: center; box-shadow: 0 -4px 20px rgba(0,0,0,0.15); }
-        footer { padding: 50px 20px 120px; background: #222; color: #888; font-size: 0.85rem; text-align: center; width: 100%; }
+        /* 8. 기타 */
+        .floating-cta { position: fixed; bottom: 0; left: 0; width: 100%; background: #FF007A; color: white; text-align: center; padding: 18px; font-size: 1.1rem; font-weight: bold; text-decoration: none; z-index: 1000; display: flex; align-items: center; justify-content: center; box-shadow: 0 -4px 15px rgba(0,0,0,0.15); }
+        footer { padding: 30px 20px 90px; background: #222; color: #888; font-size: 0.8rem; text-align: center; width: 100%; }
     </style>
 </head>
 <body>
@@ -157,13 +207,13 @@
         </div>
     </header>
 
-    <!-- 오늘의 특가 -->
+    <!-- 오늘의 특가폰 -->
     <section id="daily-special">
         <div class="container">
-            <h2 style="margin-bottom:30px;">🔥 <span id="today-date" style="color:#FF007A;">02월 24일</span> 오늘의 특가폰 🔥</h2>
+            <h2 style="margin-bottom:30px;">🔥 <span id="today-date" style="color:#FF007A;">03월 01일</span> 오늘의 특가폰 🔥</h2>
             <div class="special-container">
                 <a href="#contact-form" class="special-card">
-                    <div class="special-img-box"><img src="https://i.ibb.co/zhkdh6Dp/17.png" alt="iPhone 17 Pro"></div>
+                    <div class="special-img-box"><img src="https://i.ibb.co/Y7h743bX/iphone-17pro-0s6piftg70ym-large.jpg" alt="iPhone 17 Pro"></div>
                     <div class="special-info-box">
                         <div class="model-name">iPhone 17 Pro 🍎</div>
                         <div class="price-tag"><span>1,550,000원</span> <br> 실구매가 0원</div>
@@ -179,7 +229,7 @@
                     </div>
                 </a>
                 <a href="#contact-form" class="special-card">
-                    <div class="special-img-box"><img src="https://i.ibb.co/zhkdh6Dp/17.png" alt="iPhone 17"></div>
+                    <div class="special-img-box"><img src="https://i.ibb.co/ymsMF688/17.png" alt="iPhone 17"></div>
                     <div class="special-info-box">
                         <div class="model-name">iPhone 17 일반 ⌛</div>
                         <div class="price-tag"><span>1,250,000원</span> <br> 실구매가 0원</div>
@@ -190,7 +240,7 @@
         </div>
     </section>
 
-    <!-- 주요 혜택 -->
+    <!-- 추가 특별 혜택 -->
     <section id="benefits">
         <div class="container">
             <h2>💰 추가 특별 혜택 💰</h2>
@@ -211,16 +261,40 @@
         </div>
     </section>
 
-    <!-- QR 섹션 -->
+    <!-- 사전 등록 및 공식 채널 QR -->
     <section id="qr-registration">
         <div class="container">
-            <div class="qr-box">
-                <div class="bonus-badge">🎁 사은품 100% 증정!</div>
-                <h2>📲 U+ 고객 사전 등록 📸</h2>
-                <p style="margin-bottom:25px;">QR 등록 시 <strong>추가 지원금</strong> 혜택을 드립니다.</p>
-                <a href="https://ucrm.lguplus.co.kr/mbl/v2/rcmd/moveInfo?param=bWFydTczNDAmMjAyNjAyMjMwNDM0NDAmUVJDRF8%3D" target="_blank" class="qr-link-btn">
-                    <img src="https://i.ibb.co/RGxzMw8s/21o-Sr.jpg" alt="QR" style="width:160px; display:block;">
-                </a>
+            <h2 style="margin-bottom:10px;">📲 공식 채널 및 사전 등록</h2>
+            <p style="color:#777; font-size:0.95rem; margin-bottom:30px;">QR 이미지를 클릭하면 해당 페이지로 이동합니다.</p>
+            
+            <div class="qr-grid">
+                <!-- 1. U+ 사전등록 -->
+                <div class="qr-box">
+                    <div class="bonus-badge">🎁 전국 최저가</div>
+                    <h3>U+ 고객 사전 등록 📸</h3>
+                    <p>등록 시 <strong>추가 지원금</strong><br>혜택을 드립니다.</p>
+                    <a href="https://ucrm.lguplus.co.kr/mbl/v2/rcmd/moveInfo?param=bWFydTczNDAmMjAyNjAyMjMwNDM0NDAmUVJDRF8%3D" target="_blank" class="qr-link-btn">
+                        <img id="qr-uplus" src="https://i.ibb.co/RGxzMw8s/21o-Sr.jpg" alt="U+ QR">
+                    </a>
+                </div>
+                <!-- 2. 네이버 플레이스 -->
+                <div class="qr-box">
+                    <div class="bonus-badge">🎁 방문 혜택</div>
+                    <h3>네이버 플레이스 📍</h3>
+                    <p>매장 위치 확인 및<br>방문 리뷰 혜택 받기</p>
+                    <a href="https://naver.me/x4bgS1qw" target="_blank" class="qr-link-btn">
+                        <img id="qr-naver" src="https://i.ibb.co/hFZgh4SC/QR.png" alt="Naver QR">
+                    </a>
+                </div>
+                <!-- 3. 당근 단골 -->
+                <div class="qr-box">
+                    <div class="bonus-badge">🎁 단골 소식</div>
+                    <h3>당근 마켓 단골 🥕</h3>
+                    <p>우리 동네 단골 맺고<br>실시간 특가 소식 받기</p>
+                    <a href="https://www.daangn.com/kr/local-profile/%EC%97%98%EC%A7%80%EC%9C%A0%ED%94%8C%EB%9F%AC%EC%8A%A4-%EB%A8%B9%EC%9E%90%EA%B3%A8%EB%AA%A9%EC%A0%90-1c6kq8dzvy6m/" target="_blank" class="qr-link-btn">
+                        <img id="qr-daangn" src="https://i.ibb.co/Kcx36TVD/QR.png" alt="Daangn QR">
+                    </a>
+                </div>
             </div>
         </div>
     </section>
@@ -230,7 +304,7 @@
         <div class="container">
             <div class="form-container">
                 <h2 style="margin-top:0; margin-bottom:10px;">📝 최저가 상담 신청 🔒</h2>
-                <p style="font-size:0.95rem; color:#666; margin-bottom:30px;">신속한 상담을 위해 연락처를 남겨주세요.</p>
+                <p style="font-size:0.9rem; color:#666; margin-bottom:25px;">신속한 상담을 위해 연락처를 남겨주세요.</p>
                 
                 <form id="consultationForm">
                     <div class="input-group">
@@ -250,13 +324,12 @@
                         </select>
                     </div>
 
-                    <label style="display:block; text-align:left; font-weight:bold; font-size:0.85rem; margin-bottom:6px; color:#333;">개인정보 수집 및 이용 동의 (필수)</label>
+                    <label style="display:block; text-align:left; font-weight:bold; font-size:0.8rem; margin-bottom:5px; color:#333;">개인정보 수집 및 이용 동의 (필수)</label>
                     <div class="privacy-notice-box">
-                        주식회사 마루모바일(이하 '회사')은 고객님의 상담 신청 및 서비스 안내를 위해 아래와 같이 개인정보를 수집 및 이용합니다.<br><br>
-                        <strong>1. 수집 항목:</strong> 성함, 연락처, 관심 상품<br>
-                        <strong>2. 수집 목적:</strong> 휴대폰/인터넷 가입 상담 및 견적 안내, 이벤트 혜택 제공<br>
-                        <strong>3. 보유 및 이용 기간:</strong> 상담 완료 후 1년 이내 (고객 요청 시 지체 없이 파기)<br>
-                        <strong>4. 동의 거부권:</strong> 귀하는 개인정보 수집 및 이용 동의를 거부할 권리가 있으나, 동의 거부 시 상담 신청 서비스 이용이 제한될 수 있습니다.
+                        주식회사 마루모바일은 상담 신청을 위해 아래와 같이 개인정보를 수집합니다.<br><br>
+                        1. 수집 항목: 성함, 연락처, 관심 상품<br>
+                        2. 수집 목적: 상담 및 서비스 안내, 이벤트 정보 제공<br>
+                        3. 보유 및 이용 기간: 상담 완료 후 1년 이내 (고객 요청 시 즉시 파기)
                     </div>
 
                     <div class="privacy-check">
@@ -266,6 +339,12 @@
                     
                     <button type="submit" class="submit-btn">최대 혜택 견적 받기</button>
                 </form>
+
+                <div id="form-message">
+                    <h3 style="color:#FF007A; margin-bottom:10px;">신청 완료! 🚀</h3>
+                    <p><span id="msg-name" style="font-weight:bold;"></span>님, 정상 접수되었습니다.<br>담당 상담사가 신속히 연락드릴게요!</p>
+                    <button class="submit-btn" style="margin-top:20px; width:auto; padding:10px 30px;" onclick="closeMsg()">확인</button>
+                </div>
             </div>
         </div>
     </section>
@@ -296,11 +375,40 @@
             if (el) el.innerText = m + '월 ' + d + '일';
         }
 
-        document.getElementById('consultationForm').onsubmit = function(e) {
+        // 상담 신청 폼 처리 (Firebase Firestore 연동)
+        document.getElementById('consultationForm').onsubmit = async function(e) {
             e.preventDefault();
-            alert(document.getElementById('userName').value + '님, 상담 신청이 정상 접수되었습니다! 🚀');
-            this.reset();
+            const name = document.getElementById('userName').value;
+            const phone = document.getElementById('userPhone').value;
+            const interest = document.getElementById('interest').value;
+            const msgBox = document.getElementById('form-message');
+            const msgName = document.getElementById('msg-name');
+
+            try {
+                // window.maruDB 객체가 로드될 때까지 잠시 대기 (모듈 스크립트 특성상 필요할 수 있음)
+                if (!window.maruDB) throw new Error("DB 연결 준비 중입니다.");
+
+                const { db, collection, addDoc, serverTimestamp, appId } = window.maruDB;
+                
+                // 필수 규격 경로: /artifacts/{appId}/public/data/consultations
+                const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'consultations');
+                await addDoc(colRef, {
+                    name, phone, interest,
+                    createdAt: serverTimestamp()
+                });
+
+                msgName.innerText = name;
+                msgBox.style.display = 'flex';
+                this.reset();
+            } catch (err) {
+                console.error("데이터 저장 실패:", err);
+                alert("상담 신청 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
+            }
         };
+
+        function closeMsg() {
+            document.getElementById('form-message').style.display = 'none';
+        }
 
         window.addEventListener('DOMContentLoaded', () => {
             updateDate();
@@ -310,8 +418,21 @@
             }
         });
 
+        // 4. 채널톡 연동 (아이콘 위치 최적화 포함)
         (function(){var w=window;if(w.ChannelIO){return;}var ch=function(){ch.q=[];ch.c=function(args){ch.q.push(args);};};w.ChannelIO=ch;function l(){var s=document.createElement("script");s.type="text/javascript";s.async=true;s.src="https://cdn.channel.io/plugin/ch-plugin-web.js";var x=document.getElementsByTagName("script")[0];if(x.parentNode){x.parentNode.insertBefore(s,x);}}if(document.readyState==="complete"){l();}else{w.addEventListener("DOMContentLoaded",l);w.addEventListener("load",l);}})();
-        ChannelIO('boot', { "pluginKey": "b58cf3f5-9d23-482b-8505-d54f0238d53a" });
+        
+        ChannelIO('boot', { 
+            "pluginKey": "b58cf3f5-9d23-482b-8505-d54f0238d53a",
+            "pluginProps": {
+                "mobileMessengerProps": {
+                    "yOffset": 85 /* 모바일 플로팅 버튼(60px) 위로 띄움 */
+                },
+                "desktopMessengerProps": {
+                    "yOffset": 30,
+                    "xOffset": 30
+                }
+            }
+        });
     </script>
 </body>
 </html>
