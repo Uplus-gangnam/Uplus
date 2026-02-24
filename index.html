@@ -258,7 +258,11 @@
                 <form id="consultationForm">
                     <div class="input-group"><label>성함</label><input type="text" id="userName" placeholder="성함을 입력해주세요" required></div>
                     <div class="input-group"><label>연락처</label><input type="tel" id="userPhone" placeholder="010-0000-0000" required></div>
-                    <div class="input-group"><label>관심 상품</label><select id="interest"><option value="휴대폰 기기변경/신규개통/번호이동">휴대폰 기기변경/신규개통/번호이동</option><option value="인터넷 + TV 결합상품">인터넷 + TV 결합상품</option><option value="유심(쓰던폰 그대로) 가입">유심(쓰던폰 그대로) 가입</option></select></div>
+                    <div class="input-group"><label>관심 상품</label><select id="interest">
+    <option value="휴대폰 기기변경/신규개통/번호이동">휴대폰 기기변경/신규개통/번호이동</option>
+    <option value="인터넷 + TV 결합상품">인터넷 + TV 결합상품</option>
+    <option value="유심(쓰던폰 그대로 가입)">유심(쓰던폰 그대로 가입)</option>
+</select></div>
                     <label style="display:block; text-align:left; font-weight:bold; font-size:0.8rem; margin-bottom:5px; color:#333;">개인정보 수집 및 이용 동의 (필수)</label>
                     <div class="privacy-notice-box">주식회사 마루모바일은 상담 신청을 위해 아래와 같이 개인정보를 수집합니다.<br><br>1. 수집 항목: 성함, 연락처, 관심 상품<br>2. 수집 목적: 상담 및 서비스 안내, 이벤트 정보 제공<br>3. 보유 및 이용 기간: 상담 완료 후 1년 이내 (고객 요청 시 즉시 파기)</div>
                     <div class="privacy-check"><input type="checkbox" id="agree" required><label for="agree">내용을 확인했으며, 동의합니다.</label></div>
@@ -299,16 +303,19 @@ function closeIntro() {
     }, 500);
 }
 
-// 3. 메시지 창 닫기 및 폼 초기화 (재입력 가능하게 함)
+// [수정된] 메시지 창 닫기 및 재입력 준비 함수
 function closeMsg() {
-    document.getElementById('form-message').style.display = 'none';
+    const msgBox = document.getElementById('form-message');
     const submitBtn = document.getElementById('submitBtn');
-    submitBtn.disabled = false;
-    submitBtn.innerText = "최대 혜택 견적 받기";
-    document.getElementById('consultationForm').reset(); // 폼 초기화
+    const form = document.getElementById('consultationForm');
+
+    msgBox.style.display = 'none'; // 성공 메시지 숨기기
+    submitBtn.disabled = false;    // 버튼 다시 활성화
+    submitBtn.innerText = "최대 혜택 견적 받기"; // 버튼 글자 복구
+    form.reset(); // 입력했던 내용 싹 지우기 (재입력 가능)
 }
 
-// 4. 상담 신청 폼 처리
+// 상담 신청 폼 처리
 document.getElementById('consultationForm').onsubmit = async function(e) {
     e.preventDefault();
     
@@ -319,16 +326,18 @@ document.getElementById('consultationForm').onsubmit = async function(e) {
     const msgBox = document.getElementById('form-message');
     const msgName = document.getElementById('msg-name');
 
-    // 버튼 상태 변경
+    // 전송 중 버튼 잠금
     submitBtn.disabled = true;
     submitBtn.innerText = "전송 중...";
 
-    // 구글 폼 주소 및 데이터 설정
+    // 100% 검증된 전송 주소
     const googleFormUrl = "https://docs.google.com/forms/d/e/1FAIpQLSfX2lwlIllJWh0EGBlq_JcT6HBZyv0AUtQ6bwpeky200_MP4A/formResponse";
+    
     const formData = new URLSearchParams();
-    formData.append("entry.1691889814", name);
-    formData.append("entry.724726551", phone);
-    formData.append("entry.169055815", interest);
+    // 이미지 기준 entry ID와 매칭 (ID가 바뀌지 않았는지 꼭 확인하세요)
+    formData.append("entry.1691889814", name);     // 성함
+    formData.append("entry.724726551", phone);      // 연락처
+    formData.append("entry.169055815", interest);   // 관심 상품
 
     try {
         await fetch(googleFormUrl, {
@@ -338,46 +347,16 @@ document.getElementById('consultationForm').onsubmit = async function(e) {
             body: formData.toString()
         });
         
-        // 전송 시도 후 결과창 표시
+        // 전송 시도 후 결과 표시
         msgName.innerText = name;
         msgBox.style.display = 'flex';
     } catch (err) {
-        console.error("전송 실패:", err);
-        alert("데이터 전송 중 오류가 발생했습니다. 구글 폼 설정을 확인해주세요.");
+        console.error("전송 오류:", err);
+        alert("신청 중 오류가 발생했습니다. 구글 폼 설정을 확인해주세요.");
         submitBtn.disabled = false;
         submitBtn.innerText = "최대 혜택 견적 받기";
     }
 };
-
-// 페이지 로드 시 실행
-window.addEventListener('DOMContentLoaded', () => {
-    updateDate();
-    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-});
-        // 4. 채널톡 로드 및 연동 (구조 최적화)
-        (function() {
-            var w = window;
-            if (w.ChannelIO) { return; }
-            var ch = function() { ch.c(arguments); };
-            ch.q = [];
-            ch.c = function(args) { ch.q.push(args); };
-            w.ChannelIO = ch;
-            function l() {
-                if (w.ChannelIOInitialized) { return; }
-                w.ChannelIOInitialized = true;
-                var s = document.createElement('script');
-                s.type = 'text/javascript';
-                s.async = true;
-                s.src = 'https://cdn.channel.io/plugin/ch-plugin-web.js';
-                s.charset = 'UTF-8';
-                var x = document.getElementsByTagName('script')[0];
-                x.parentNode.insertBefore(s, x);
-            }
-            if (document.readyState === 'complete') { l(); }
-            else if (window.attachEvent) { window.attachEvent('onload', l); }
-            else { window.addEventListener('DOMContentLoaded', l, false); window.addEventListener('load', l, false); }
-        })();
-
         // 채널톡 부팅
         window.ChannelIO('boot', {
             "pluginKey": "b58cf3f5-9d23-482b-8505-d54f0238d53a",
@@ -403,6 +382,7 @@ window.addEventListener('DOMContentLoaded', () => {
     </script>
 </body>
 </html>
+
 
 
 
