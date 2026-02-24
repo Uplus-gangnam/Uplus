@@ -5,16 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>LG유플러스 공식 파트너 주식회사 마루모바일</title>
     <style>
+        /* [채널톡 우선순위 및 레이아웃 설정] */
+        #ch-plugin { z-index: 10000 !important; } /* 채널톡을 최상단으로 */
+        #intro-overlay { z-index: 9998 !important; } /* 인트로를 채널톡보다 아래로 */
+        body { padding-bottom: 70px; } 
 
-        /* 채널톡 버튼이 인트로보다 위에 오도록 설정 */
-#ch-plugin { z-index: 10000 !important; }
-
-/* 하단 고정 바 때문에 body에 여백을 주어 버튼이 가려지지 않게 함 */
-body { padding-bottom: 70px; } 
-
-/* 인트로 오버레이 z-index 살짝 하향 조정 */
-#intro-overlay { z-index: 9998; }
-        
         /* 1. 기본 스타일 및 레이아웃 최적화 */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         html, body { 
@@ -36,7 +31,7 @@ body { padding-bottom: 70px; }
         #intro-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 9999; color: white; text-align: center; transition: opacity 0.5s ease, visibility 0.5s; 
+            color: white; text-align: center; transition: opacity 0.5s ease, visibility 0.5s; 
             background: #000;
         }
         #intro-overlay.hidden { opacity: 0 !important; visibility: hidden; pointer-events: none; }
@@ -150,7 +145,6 @@ body { padding-bottom: 70px; }
 </head>
 <body>
 
-    <!-- 인트로 -->
     <div id="intro-overlay">
         <video autoplay muted loop playsinline id="intro-video">
             <source src="Galaxy.mp4" type="video/mp4">
@@ -171,7 +165,6 @@ body { padding-bottom: 70px; }
         </div>
     </header>
 
-    <!-- 오늘의 특가폰 -->
     <section id="daily-special">
         <div class="container">
             <h2 style="margin-bottom:30px;">🔥 <span id="today-date" style="color:#FF007A;">02월 24일</span> 오늘의 특가폰 🔥</h2>
@@ -204,7 +197,6 @@ body { padding-bottom: 70px; }
         </div>
     </section>
 
-    <!-- 추가 특별 혜택 -->
     <section id="benefits">
         <div class="container">
             <h2>💰 추가 특별 혜택 💰</h2>
@@ -217,7 +209,6 @@ body { padding-bottom: 70px; }
                     <h3>🚀 인터넷 + TV 결합</h3>
                     <p>현금 100만원 지원<br>개통 당일 즉시 지급</p>
                 </a>
-                <!-- 채널톡 상담 직접 버튼 -->
                 <div class="benefit-item" onclick="if(window.ChannelIO) { ChannelIO('showMessenger'); }">
                     <h3>💬 실시간 채팅 상담</h3>
                     <p>문의사항은 채널톡으로!<br>친절 전문 상담원 대기중</p>
@@ -226,7 +217,6 @@ body { padding-bottom: 70px; }
         </div>
     </section>
 
-    <!-- 공식 채널 및 사전 등록 QR -->
     <section id="qr-registration">
         <div class="container">
             <h2 style="margin-bottom:10px;">📲 공식 채널 및 사전 등록</h2>
@@ -260,7 +250,6 @@ body { padding-bottom: 70px; }
         </div>
     </section>
 
-    <!-- 상담 신청 (구글 폼 연동) -->
     <section id="contact-form">
         <div class="container">
             <div class="form-container">
@@ -269,10 +258,10 @@ body { padding-bottom: 70px; }
                     <div class="input-group"><label>성함</label><input type="text" id="userName" placeholder="성함을 입력해주세요" required></div>
                     <div class="input-group"><label>연락처</label><input type="tel" id="userPhone" placeholder="010-0000-0000" required></div>
                     <div class="input-group"><label>관심 상품</label><select id="interest">
-    <option value="휴대폰 기기변경/신규개통/번호이동">휴대폰 기기변경/신규개통/번호이동</option>
-    <option value="인터넷 + TV 결합상품">인터넷 + TV 결합상품</option>
-    <option value="유심(쓰던폰 그대로 가입)">유심(쓰던폰 그대로 가입)</option>
-</select></div>
+                        <option value="휴대폰 기기변경/신규개통/번호이동">휴대폰 기기변경/신규개통/번호이동</option>
+                        <option value="인터넷 + TV 결합상품">인터넷 + TV 결합상품</option>
+                        <option value="유심(쓰던폰 그대로 가입)">유심(쓰던폰 그대로 가입)</option>
+                    </select></div>
                     <label style="display:block; text-align:left; font-weight:bold; font-size:0.8rem; margin-bottom:5px; color:#333;">개인정보 수집 및 이용 동의 (필수)</label>
                     <div class="privacy-notice-box">주식회사 마루모바일은 상담 신청을 위해 아래와 같이 개인정보를 수집합니다.<br><br>1. 수집 항목: 성함, 연락처, 관심 상품<br>2. 수집 목적: 상담 및 서비스 안내, 이벤트 정보 제공<br>3. 보유 및 이용 기간: 상담 완료 후 1년 이내 (고객 요청 시 즉시 파기)</div>
                     <div class="privacy-check"><input type="checkbox" id="agree" required><label for="agree">내용을 확인했으며, 동의합니다.</label></div>
@@ -291,126 +280,132 @@ body { padding-bottom: 70px; }
     <a href="tel:010-8080-3053" class="floating-cta">전화 상담하기 📞</a>
 
     <script>
-// 1. 날짜 업데이트 함수
-function updateDate() {
-    const now = new Date();
-    const m = (now.getMonth() + 1).toString().padStart(2, '0');
-    const d = now.getDate().toString().padStart(2, '0');
-    const el = document.getElementById('today-date');
-    if (el) el.innerText = m + '월 ' + d + '일';
-}
+        // 1. 날짜 업데이트 함수
+        function updateDate() {
+            const now = new Date();
+            const m = (now.getMonth() + 1).toString().padStart(2, '0');
+            const d = now.getDate().toString().padStart(2, '0');
+            const el = document.getElementById('today-date');
+            if (el) el.innerText = m + '월 ' + d + '일';
+        }
 
-// 2. 인트로 닫기
-function closeIntro() {
-    const intro = document.getElementById('intro-overlay');
-    intro.classList.add('hidden');
-    window.scrollTo({ top: 0, behavior: 'instant' });
-    if (window.ChannelIO) { window.ChannelIO('showChannelButton'); }
-    setTimeout(() => {
-        const video = document.getElementById('intro-video');
-        if (video) video.pause();
-        intro.style.display = 'none';
-    }, 500);
-}
+        // 2. 인트로 닫기
+        function closeIntro() {
+            const intro = document.getElementById('intro-overlay');
+            intro.classList.add('hidden');
+            window.scrollTo({ top: 0, behavior: 'instant' });
+            
+            // 인트로가 닫힐 때 채널톡 버튼 강제 노출
+            if (window.ChannelIO) {
+                window.ChannelIO('showChannelButton');
+            }
+            
+            setTimeout(() => {
+                const video = document.getElementById('intro-video');
+                if (video) video.pause();
+                intro.style.display = 'none';
+                
+                // 완전히 가려진 뒤 한 번 더 노출 보장
+                if (window.ChannelIO) { 
+                    window.ChannelIO('showChannelButton');
+                }
+            }, 500);
+        }
 
-// [수정] 확인 버튼 클릭 시 다시 입력할 수 있게 초기화
-function closeMsg() {
-    const msgBox = document.getElementById('form-message');
-    const submitBtn = document.getElementById('submitBtn');
-    const form = document.getElementById('consultationForm');
+        // 3. 상담 완료 후 리셋 및 재입력 가능 기능
+        function closeMsg() {
+            const msgBox = document.getElementById('form-message');
+            const submitBtn = document.getElementById('submitBtn');
+            const form = document.getElementById('consultationForm');
 
-    msgBox.style.display = 'none'; // 메시지 창 숨기기
-    submitBtn.disabled = false;    // 버튼 다시 활성화
-    submitBtn.innerText = "최대 혜택 견적 받기"; // 버튼 글자 복구
-    form.reset(); // 입력 내용 초기화
-}
+            msgBox.style.display = 'none'; 
+            submitBtn.disabled = false;    
+            submitBtn.innerText = "최대 혜택 견적 받기"; 
+            form.reset(); 
+        }
 
-// 상담 신청 폼 처리
-document.getElementById('consultationForm').onsubmit = async function(e) {
-    e.preventDefault();
-    
-    const submitBtn = document.getElementById('submitBtn');
-    const name = document.getElementById('userName').value;
-    const phone = document.getElementById('userPhone').value;
-    const interest = document.getElementById('interest').value;
-    const msgBox = document.getElementById('form-message');
-    const msgName = document.getElementById('msg-name');
+        // 4. 상담 신청 폼 처리 (구글 폼 연동)
+        document.getElementById('consultationForm').onsubmit = async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const name = document.getElementById('userName').value;
+            const phone = document.getElementById('userPhone').value;
+            const interest = document.getElementById('interest').value;
+            const msgBox = document.getElementById('form-message');
+            const msgName = document.getElementById('msg-name');
 
-    submitBtn.disabled = true;
-    submitBtn.innerText = "전송 중...";
+            submitBtn.disabled = true;
+            submitBtn.innerText = "전송 중...";
 
-    const googleFormUrl = "https://docs.google.com/forms/d/e/1FAIpQLSfX2lwlIllJWh0EGBlq_JcT6HBZyv0AUtQ6bwpeky200_MP4A/formResponse";
-    
-    const formData = new URLSearchParams();
-    // ⚠️ 분석된 진짜 ID로 교체했습니다.
-    formData.append("entry.1490683093", name);      // 성함 ID
-    formData.append("entry.1801584533", phone);     // 연락처 ID
-    formData.append("entry.700319442", interest);   // 관심 상품 ID
+            const googleFormUrl = "https://docs.google.com/forms/d/e/1FAIpQLSfX2lwlIllJWh0EGBlq_JcT6HBZyv0AUtQ6bwpeky200_MP4A/formResponse";
+            
+            const formData = new URLSearchParams();
+            formData.append("entry.1490683093", name);      
+            formData.append("entry.1801584533", phone);     
+            formData.append("entry.700319442", interest);   
 
-    try {
-        await fetch(googleFormUrl, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: formData.toString()
+            try {
+                await fetch(googleFormUrl, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: formData.toString()
+                });
+                
+                msgName.innerText = name;
+                msgBox.style.display = 'flex';
+            } catch (err) {
+                console.error("전송 오류:", err);
+                alert("신청 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+                submitBtn.disabled = false;
+                submitBtn.innerText = "최대 혜택 견적 받기";
+            }
+        };
+
+        // 5. 채널톡 로드 스크립트 (Loader 복구)
+        (function() {
+            var w = window;
+            if (w.ChannelIO) { return; }
+            var ch = function() { ch.c(arguments); };
+            ch.q = [];
+            ch.c = function(args) { ch.q.push(args); };
+            w.ChannelIO = ch;
+            function l() {
+                if (w.ChannelIOInitialized) { return; }
+                w.ChannelIOInitialized = true;
+                var s = document.createElement('script');
+                s.type = 'text/javascript';
+                s.async = true;
+                s.src = 'https://cdn.channel.io/plugin/ch-plugin-web.js';
+                s.charset = 'UTF-8';
+                var x = document.getElementsByTagName('script')[0];
+                x.parentNode.insertBefore(s, x);
+            }
+            if (document.readyState === 'complete') { l(); }
+            else if (window.attachEvent) { window.attachEvent('onload', l); }
+            else { window.addEventListener('DOMContentLoaded', l, false); window.addEventListener('load', l, false); }
+        })();
+
+        // 6. 채널톡 부팅 및 위치 설정
+        window.ChannelIO('boot', {
+            "pluginKey": "b58cf3f5-9d23-482b-8505-d54f0238d53a",
+            "pluginProps": {
+                "mobileMessengerProps": {
+                    "yOffset": 120 
+                },
+                "desktopMessengerProps": {
+                    "yOffset": 30,
+                    "xOffset": 30
+                }
+            }
         });
-        
-        // 전송 시도 후 성공 메시지 표시
-        msgName.innerText = name;
-        msgBox.style.display = 'flex';
-    } catch (err) {
-        console.error("전송 오류:", err);
-        alert("신청 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
-        submitBtn.disabled = false;
-        submitBtn.innerText = "최대 혜택 견적 받기";
-    }
-};
-// 1. 채널톡 부팅 설정 수정
-window.ChannelIO('boot', {
-    "pluginKey": "b58cf3f5-9d23-482b-8505-d54f0238d53a",
-    "pluginProps": {
-        "mobileMessengerProps": {
-            "yOffset": 120 // '전화 상담하기' 바보다 훨씬 위로 올림 (기존 100에서 상향)
-        },
-        "desktopMessengerProps": {
-            "yOffset": 30,
-            "xOffset": 30
-        }
-    }
-});
 
-// 2. 인트로 닫기 함수 내 로직 강화
-function closeIntro() {
-    const intro = document.getElementById('intro-overlay');
-    intro.classList.add('hidden');
-    window.scrollTo({ top: 0, behavior: 'instant' });
-    
-    // 인트로가 닫히는 즉시 버튼 강제 노출
-    if (window.ChannelIO) {
-        window.ChannelIO('showChannelButton');
-    }
-    
-    setTimeout(() => {
-        const video = document.getElementById('intro-video');
-        if (video) video.pause();
-        intro.style.display = 'none';
-        
-        // 완전히 사라진 후 한 번 더 확인 노출
-        if (window.ChannelIO) { 
-            window.ChannelIO('showChannelButton');
-        }
-    }, 500);
-}
+        // 초기화 시 실행
+        window.addEventListener('load', () => {
+            updateDate();
+            window.scrollTo(0, 0);
+        });
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
