@@ -12,16 +12,16 @@
             overflow-x: hidden; /* 가로 스크롤 절대 방지 */
             font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif; 
             line-height: 1.6; color: #333; 
-            word-break: keep-all; /* 한글 줄바꿈 최적화 */
+            word-break: keep-all; 
         }
-        section { padding: 80px 0; width: 100%; position: relative; }
-        .container { width: 100%; max-width: 840px; margin: 0 auto; padding: 0 20px; }
+        section { padding: 60px 0; width: 100%; position: relative; text-align: center; display: flex; justify-content: center; } 
+        .container { width: 100%; max-width: 800px; margin: 0 auto; padding: 0 20px; display: flex; flex-direction: column; align-items: center; } 
         html { scroll-behavior: smooth; }
 
         @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
         @keyframes shine { from { left: -100%; } to { left: 150%; } }
 
-        /* 2. 인트로 스플래시 정렬 보정 */
+        /* 2. 인트로 스플래시 */
         #intro-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -40,23 +40,18 @@
             cursor: pointer; border: none; box-shadow: 0 4px 15px rgba(255, 0, 122, 0.4);
             animation: pulse 2s infinite; display: inline-block; text-decoration: none;
         }
-        .enter-btn::after, .submit-btn::after {
-            content: ''; position: absolute; top: -50%; left: -100%; width: 50%; height: 200%;
-            background: rgba(255,255,255,0.3); transform: rotate(30deg);
-        }
         .enter-btn:hover::after, .submit-btn:hover::after { animation: shine 0.6s forwards; }
 
-        /* 3. 헤더 정렬 */
+        /* 3. 헤더 */
         header { 
             background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://i.ibb.co/fd9nKMPx/Gemini-Generated-Image-e3pgg7e3pgg7e3pg.png') no-repeat center/cover;
             color: white; padding: 100px 20px; text-align: center; width: 100%;
         }
         header h1 { font-size: 2.4rem; color: #FF007A; margin: 0; line-height: 1.2; }
-        header p { font-size: 1.1rem; margin-top: 10px; opacity: 0.9; }
 
-        /* 4. 오늘의 특가 정렬 보정 (PC/모바일 공용) */
+        /* 4. 오늘의 특가 정렬 보정 (콤팩트한 디자인) */
         #daily-special { background: linear-gradient(to bottom, #ffffff, #fff5f8); }
-        .special-container { display: flex; flex-direction: column; gap: 20px; width: 100%; }
+        .special-container { display: flex; flex-direction: column; gap: 20px; width: 100%; max-width: 700px; align-items: center; }
         .special-card {
             display: flex; align-items: center; background: white; text-decoration: none; transition: all 0.3s ease;
             border-radius: 20px; overflow: hidden; border: 2px solid transparent;
@@ -70,24 +65,31 @@
             background-image: linear-gradient(#fff, #fff), linear-gradient(to right, #FF007A, #ff7eb3);
             box-shadow: 0 10px 25px rgba(255, 0, 122, 0.15);
         }
-        .special-img-box { width: 180px; height: 180px; flex-shrink: 0; background: #f9f9f9; padding: 15px; border-right: 1px solid #eee; display: flex; justify-content: center; align-items: center; }
+        .special-img-box { 
+            width: 180px; height: 180px; flex-shrink: 0; background: #f9f9f9; 
+            padding: 20px; border-right: 1px solid #eee; display: flex; 
+            justify-content: center; align-items: center; 
+        }
         .special-img-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
-        .special-info-box { flex: 1; padding: 25px 30px; text-align: left; }
+        .special-info-box { 
+            flex: 1; padding: 20px 30px; text-align: left; 
+            display: flex; flex-direction: column; justify-content: center; 
+        }
         .model-name { font-size: 1.4rem; font-weight: bold; color: #333; margin-bottom: 5px; }
         .price-tag { font-size: 1.7rem; font-weight: 900; color: #FF007A; margin-bottom: 12px; line-height: 1.2; }
         .price-tag span { font-size: 0.95rem; color: #999; text-decoration: line-through; font-weight: normal; margin-right: 8px; }
-        .card-cta-btn { display: inline-block; background: #333; color: white; padding: 8px 18px; border-radius: 6px; font-size: 0.9rem; font-weight: bold; transition: 0.3s; }
+        .card-cta-btn { align-self: flex-start; background: #333; color: white; padding: 8px 20px; border-radius: 8px; font-size: 0.9rem; font-weight: bold; transition: 0.3s; }
         .special-card:hover .card-cta-btn { background: #FF007A; }
 
         @media (max-width: 600px) {
             header h1 { font-size: 1.8rem; }
             .special-card { flex-direction: column; }
             .special-img-box { width: 100%; height: 200px; border-right: none; border-bottom: 1px solid #eee; }
-            .special-info-box { text-align: center; padding: 25px 20px; width: 100%; }
-            .card-cta-btn { width: 100%; }
+            .special-info-box { text-align: center; padding: 25px 20px; width: 100%; align-items: center; }
+            .card-cta-btn { align-self: center; width: 100%; }
         }
 
-        /* 5. 주요 혜택 그리드 보정 */
+        /* 5. 주요 혜택 그리드 정렬 */
         .benefit-grid { 
             display: grid; 
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); 
@@ -98,38 +100,35 @@
         .benefit-item { 
             background: white; padding: 30px; border-radius: 20px; 
             box-shadow: 0 10px 20px rgba(0,0,0,0.05); transition: 0.3s; 
-            text-decoration: none; color: inherit; display: block; 
+            text-decoration: none; color: inherit; display: flex; 
+            flex-direction: column; align-items: center; 
             border-bottom: 4px solid #eee; height: 100%;
         }
         .benefit-item:hover { transform: translateY(-10px); border-color: #FF007A; box-shadow: 0 15px 30px rgba(255, 0, 122, 0.1); }
-        .benefit-item h3 { margin-top: 0; color: #FF007A; }
+        .benefit-item h3 { margin-top: 0; color: #FF007A; font-size: 1.2rem; }
 
         /* 6. 상담 신청 및 개인정보 고지 */
         .form-container { width: 100%; max-width: 500px; margin: 0 auto; padding: 40px 25px; border: 2px solid #FF007A; border-radius: 25px; background: white; box-shadow: 0 15px 35px rgba(255, 0, 122, 0.08); }
         .input-group { text-align: left; margin-bottom: 18px; }
         .input-group label { font-weight: bold; display: block; margin-bottom: 6px; font-size: 0.9rem; color: #555; }
-        .input-group input, .input-group select { width: 100%; padding: 14px; border: 1px solid #ddd; border-radius: 10px; font-size: 1rem; box-sizing: border-box; outline: none; transition: border 0.3s; }
-        .input-group input:focus { border-color: #FF007A; }
+        .input-group input, .input-group select { width: 100%; padding: 14px; border: 1px solid #ddd; border-radius: 10px; font-size: 1rem; box-sizing: border-box; outline: none; }
         
         .privacy-notice-box {
             width: 100%; height: 110px; overflow-y: scroll; background: #f9f9f9; border: 1px solid #eee; 
             border-radius: 10px; padding: 12px; font-size: 0.8rem; color: #777; text-align: left; margin-bottom: 12px;
             line-height: 1.6;
         }
-        .privacy-check { text-align: left; margin-bottom: 25px; display: flex; align-items: center; cursor: pointer; }
+        .privacy-check { text-align: left; margin-bottom: 25px; display: flex; align-items: center; cursor: pointer; justify-content: center; }
         .privacy-check input { width: 20px; height: 20px; margin-right: 12px; cursor: pointer; accent-color: #FF007A; }
         .privacy-check label { font-size: 0.95rem; font-weight: bold; cursor: pointer; color: #333; }
 
-        .submit-btn { width: 100%; padding: 18px; font-size: 1.2rem; }
-
-        /* 7. QR 및 기타 섹션 */
+        /* 7. 기타 */
         #qr-registration { background: #f9f9f9; }
-        .qr-box { background: white; padding: 45px 25px; border-radius: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.06); display: inline-block; position: relative; max-width: 100%; }
-        .bonus-badge { position: absolute; top: -15px; right: 20px; background: #FF007A; color: white; padding: 8px 18px; border-radius: 50px; font-weight: bold; font-size: 0.9rem; animation: bounce 2s infinite; box-shadow: 0 5px 15px rgba(255, 0, 122, 0.3); }
+        .qr-box { background: white; padding: 45px 30px; border-radius: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.06); display: inline-block; position: relative; max-width: 100%; }
+        .bonus-badge { position: absolute; top: -15px; right: 20px; background: #FF007A; color: white; padding: 8px 18px; border-radius: 50px; font-weight: bold; animation: bounce 2s infinite; }
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
         
         .qr-link-btn { display: inline-block; border: 2.5px solid #FF007A; border-radius: 20px; padding: 12px; background: #fff; transition: 0.3s; }
-        .qr-link-btn:hover { transform: scale(1.03); box-shadow: 0 10px 20px rgba(255, 0, 122, 0.1); }
 
         .floating-cta { position: fixed; bottom: 0; left: 0; width: 100%; background: #FF007A; color: white; text-align: center; padding: 20px; font-size: 1.1rem; font-weight: bold; text-decoration: none; z-index: 1000; display: flex; align-items: center; justify-content: center; box-shadow: 0 -4px 20px rgba(0,0,0,0.15); }
         footer { padding: 50px 20px 120px; background: #222; color: #888; font-size: 0.85rem; text-align: center; width: 100%; }
@@ -161,7 +160,7 @@
     <!-- 오늘의 특가 -->
     <section id="daily-special">
         <div class="container">
-            <h2 style="margin-bottom:30px;">🔥 <span id="today-date" style="color:#FF007A;">03월 00일</span> 오늘의 특가폰 🔥</h2>
+            <h2 style="margin-bottom:30px;">🔥 <span id="today-date" style="color:#FF007A;">02월 24일</span> 오늘의 특가폰 🔥</h2>
             <div class="special-container">
                 <a href="#contact-form" class="special-card">
                     <div class="special-img-box"><img src="https://i.ibb.co/zhkdh6Dp/17.png" alt="iPhone 17 Pro"></div>
@@ -278,7 +277,6 @@
     <a href="tel:010-8080-3053" class="floating-cta">전화 상담하기 📞</a>
 
     <script>
-        // 1. 인트로 제어
         function closeIntro() {
             const intro = document.getElementById('intro-overlay');
             intro.classList.add('hidden');
@@ -290,7 +288,6 @@
             }, 500);
         }
 
-        // 2. 날짜 자동 업데이트
         function updateDate() {
             const now = new Date();
             const m = (now.getMonth() + 1).toString().padStart(2, '0');
@@ -299,15 +296,12 @@
             if (el) el.innerText = m + '월 ' + d + '일';
         }
 
-        // 3. 상담 폼 처리
         document.getElementById('consultationForm').onsubmit = function(e) {
             e.preventDefault();
-            const name = document.getElementById('userName').value;
-            alert(name + '님, 상담 신청이 정상 접수되었습니다! 🚀\n담당 상담사가 신속히 연락드리겠습니다.');
+            alert(document.getElementById('userName').value + '님, 상담 신청이 정상 접수되었습니다! 🚀');
             this.reset();
         };
 
-        // 초기화 실행
         window.addEventListener('DOMContentLoaded', () => {
             updateDate();
             window.scrollTo(0, 0);
@@ -316,8 +310,7 @@
             }
         });
 
-        // 4. 채널톡 연동
-        (function(){var w=window;if(w.ChannelIO){return;}var ch=function(){ch.q=[];ch.c=function(args){ch.q.push(args);};};w.ChannelIO=ch;function l(){var s=document.createElement("script");s.type="text/javascript";s.async=true;s.src="https://cdn.channel.io/plugin/ch-plugin-web.js";var x=document.getElementsByTagName("script")[0];x.parentNode.insertBefore(s,x);}if(document.readyState==="complete"){l();}else{w.addEventListener("DOMContentLoaded",l);w.addEventListener("load",l);}})();
+        (function(){var w=window;if(w.ChannelIO){return;}var ch=function(){ch.q=[];ch.c=function(args){ch.q.push(args);};};w.ChannelIO=ch;function l(){var s=document.createElement("script");s.type="text/javascript";s.async=true;s.src="https://cdn.channel.io/plugin/ch-plugin-web.js";var x=document.getElementsByTagName("script")[0];if(x.parentNode){x.parentNode.insertBefore(s,x);}}if(document.readyState==="complete"){l();}else{w.addEventListener("DOMContentLoaded",l);w.addEventListener("load",l);}})();
         ChannelIO('boot', { "pluginKey": "b58cf3f5-9d23-482b-8505-d54f0238d53a" });
     </script>
 </body>
