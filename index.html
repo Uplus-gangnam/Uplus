@@ -5,6 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LG유플러스 공식 파트너 주식회사 마루모바일</title>
     <style>
+/* 1. 버튼 광택 효과 (Shine) */
+.enter-btn, .submit-btn {
+    position: relative;
+    overflow: hidden;
+}
+.enter-btn::after {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%; width: 200%; height: 200%;
+    background: rgba(255,255,255,0.2);
+    transform: rotate(45deg);
+    transition: 0.5s;
+    left: -100%;
+}
+.enter-btn:hover::after {
+    left: 100%;
+}
+
+/* 2. 카드 강조 효과 (Glow 테두리) */
+.special-card {
+    border: 2px solid transparent;
+    background-image: linear-gradient(#fff, #fff), linear-gradient(to right, #eee, #eee);
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+}
+.special-card:hover {
+    background-image: linear-gradient(#fff, #fff), linear-gradient(to right, #FF007A, #ff7eb3);
+        
         /* 1. 기본 스타일 및 레이아웃 */
         body { font-family: 'Pretendard', sans-serif; margin: 0; padding: 0; line-height: 1.6; color: #333; }
         section { padding: 60px 20px; text-align: center; }
@@ -166,40 +194,6 @@
         .review { background: #fffbe6; padding: 20px; border-left: 5px solid #ffcc00; margin: 10px 0; text-align: left; }
         .floating-cta { position: fixed; bottom: 0; left: 0; width: 100%; background: #FF007A; color: white; text-align: center; padding: 20px 0; font-size: 1.2rem; font-weight: bold; text-decoration: none; z-index: 1000; display: flex; align-items: center; justify-content: center; }
         footer { padding: 40px 20px 100px; background: #333; color: #ccc; font-size: 0.8rem; }
-
-/* 1. 버튼 광택 효과 (Shine) */
-.enter-btn, .submit-btn {
-    position: relative;
-    overflow: hidden;
-}
-.enter-btn::after {
-    content: '';
-    position: absolute;
-    top: -50%; left: -50%; width: 200%; height: 200%;
-    background: rgba(255,255,255,0.2);
-    transform: rotate(45deg);
-    transition: 0.5s;
-    left: -100%;
-}
-.enter-btn:hover::after {
-    left: 100%;
-}
-
-/* 2. 카드 강조 효과 (Glow 테두리) */
-.special-card {
-    border: 2px solid transparent;
-    background-image: linear-gradient(#fff, #fff), linear-gradient(to right, #eee, #eee);
-    background-origin: border-box;
-    background-clip: content-box, border-box;
-}
-.special-card:hover {
-    background-image: linear-gradient(#fff, #fff), linear-gradient(to right, #FF007A, #ff7eb3);
-}
-
-/* 3. 부드러운 배경 색상 */
-#daily-special {
-    background: linear-gradient(to bottom, #ffffff, #fff5f8);
-}        
     </style>
 </head>
 <body>
@@ -210,9 +204,9 @@
         </video>
         <div class="video-overlay"></div>
         <div class="intro-content">
-            <p>LG U+ 공식 파트너 주식회사 마루모바일</p>
-            <h2>쓰던폰 그대로<br>20만원 즉시 지급!</h2>
-            <p>대한민국 어디서나 개통 가능</p>
+            <p>📱LG U+ 공식 파트너 주식회사 마루모바일📱</p>
+            <h2>쓰던폰 그대로✨<br>20만원 즉시 지급!</h2>
+            <p>대한민국 어디서나 개통 가능📢</p>
             <button class="enter-btn" onclick="closeIntro()">네, 혜택 확인하기</button>
         </div>
     </div>
@@ -267,24 +261,24 @@
 
     <section id="benefits">
         <div class="container">
-            <h2>💰 2026년 HOT 특가 💰</h2>
+            <h2>💰 추가 특별 혜택 💰</h2>
             <div class="benefit-grid">
                 <a href="#contact-form" class="benefit-link">
                     <div class="benefit-item">
-                        <h3>💰 S26 Ultra</h3>
-                        <p>김포시 최저가<br>0원</p>
+                        <h3>💰 쓰던폰 그대로 USIM 가입 </h3>
+                        <p>최대 20만원 지급<br>0원</p>
                     </div>
                 </a>
                 <a href="#contact-form" class="benefit-link">
                     <div class="benefit-item">
-                        <h3>🚀 인터넷 동시 가입</h3>
-                        <p>현금 100만원 지원<br>1G + TV프리미엄</p>
+                        <h3>🌐 인터넷 + TV 가입</h3>
+                        <p>현금 100만원 지원<br>개통 즉시 지급</p>
                     </div>
                 </a>
                 <a href="#contact-form" class="benefit-link">
                     <div class="benefit-item">
-                        <h3>👨‍👩‍👧‍👦 아이폰17 전모델</h3>
-                        <p>기기 부족 사전 예약<br>실구매가 0원</p>
+                        <h3>📞 24시간 상담 </h3>
+                        <p>문자/전화/채널톡 상담<br>친절 상담 대기중</p>
                     </div>
                 </a>
             </div>
@@ -356,7 +350,7 @@
     </section>
 
     <footer>
-        <p>© 2026 LG유플러스 공식 파트너 주식회사 마루모바일 | 사업자번호: 000-00-00000</p>
+        <p>© 2026 LG유플러스 공식 파트너 주식회사 마루모바일 <br> 사업자번호: 000-00-00000</p>
     </footer>
 
     <a href="tel:010-8080-3053" class="floating-cta">지금 바로 전화 상담하기 (클릭)</a>
@@ -425,5 +419,6 @@ window.onbeforeunload = function () {
     </script>
 </body>
 </html>
+
 
 
