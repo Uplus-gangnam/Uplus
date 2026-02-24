@@ -5,6 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LG유플러스 공식 파트너 주식회사 마루모바일</title>
     <style>
+/* 1. 버튼 광택 효과 (Shine) */
+.enter-btn, .submit-btn {
+    position: relative;
+    overflow: hidden;
+}
+.enter-btn::after {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%; width: 200%; height: 200%;
+    background: rgba(255,255,255,0.2);
+    transform: rotate(45deg);
+    transition: 0.5s;
+    left: -100%;
+}
+.enter-btn:hover::after {
+    left: 100%;
+}
+
+/* 2. 카드 강조 효과 (Glow 테두리) */
+.special-card {
+    border: 2px solid transparent;
+    background-image: linear-gradient(#fff, #fff), linear-gradient(to right, #eee, #eee);
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+}
+.special-card:hover {
+    background-image: linear-gradient(#fff, #fff), linear-gradient(to right, #FF007A, #ff7eb3);
+}
+
+/* 3. 부드러운 배경 색상 */
+#daily-special {
+    background: linear-gradient(to bottom, #ffffff, #fff5f8);
+}
+        
         /* 1. 기본 스타일 및 레이아웃 */
         body { font-family: 'Pretendard', sans-serif; margin: 0; padding: 0; line-height: 1.6; color: #333; }
         section { padding: 60px 20px; text-align: center; }
@@ -363,6 +397,7 @@ function closeIntro() {
     </script>
 </body>
 </html>
+
 
 
 
