@@ -41,27 +41,104 @@
         }
         header h1 { font-size: 2.5rem; margin-bottom: 10px; color: #FF007A; }
 
-        /* 4. 오늘의 특가 섹션 (수정 반영됨) */
-        #daily-special { background: #fff; padding: 60px 20px; }
-        .special-card {
-            max-width: 800px; margin: 0 auto; border: 3px solid #FF007A; border-radius: 25px;
-            overflow: hidden; display: flex; align-items: center; text-decoration: none;
-            transition: transform 0.3s ease; background: #fff; box-shadow: 0 10px 30px rgba(255, 0, 122, 0.1);
-        }
-        .special-card:hover { transform: scale(1.02); }
-        .special-img { flex: 1; background: #f9f9f9; padding: 20px; display: flex; justify-content: center; align-items: center; }
-        .special-img img { max-width: 100%; height: auto; max-height: 250px; object-fit: contain; }
-        .special-info { flex: 1.2; padding: 30px; text-align: left; }
-        .special-tag { background: #FF007A; color: white; padding: 5px 12px; border-radius: 50px; font-size: 0.9rem; font-weight: bold; display: inline-block; margin-bottom: 10px; }
-        .special-info h2 { margin: 10px 0; font-size: 1.8rem; color: #333; line-height: 1.2; }
-        .special-price { font-size: 2.2rem; font-weight: 900; color: #FF007A; margin: 15px 0; }
-        .special-price span { font-size: 1rem; color: #888; text-decoration: line-through; margin-right: 10px; font-weight: normal; }
-        .special-btn { background: #333; color: white; padding: 10px 20px; border-radius: 8px; display: inline-block; font-weight: bold; }
+/* 오늘의 특가 - 버튼 포함 리스트형 디자인 */
+#daily-special { background: #fdfdfd; padding: 60px 20px; }
+.special-container { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
 
-        @media (max-width: 600px) {
-            .special-card { flex-direction: column; }
-            .special-info { text-align: center; }
-        }
+.special-card {
+    display: flex;
+    align-items: center;
+    background: white;
+    border: 2px solid #eee;
+    border-radius: 20px;
+    overflow: hidden;
+    text-decoration: none; /* 링크 밑줄 제거 */
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+    position: relative;
+}
+
+.special-card:hover {
+    transform: translateY(-5px);
+    border-color: #FF007A;
+    box-shadow: 0 10px 25px rgba(255, 0, 122, 0.1);
+}
+
+/* 왼쪽 이미지 영역 - 고정 사이즈 */
+.special-img-box {
+    width: 200px;
+    height: 200px;
+    flex-shrink: 0;
+    background: #f9f9f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    border-right: 1px solid #eee;
+}
+
+.special-img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* 이미지 비율 유지하며 틀 안에 맞춤 */
+}
+
+/* 오른쪽 정보 영역 */
+.special-info-box {
+    flex: 1;
+    padding: 25px 30px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.special-info-box .model-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.special-info-box .price-tag {
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: #FF007A;
+    margin-bottom: 15px;
+}
+
+.special-info-box .price-tag span {
+    font-size: 0.95rem;
+    color: #999;
+    text-decoration: line-through;
+    margin-right: 10px;
+    font-weight: normal;
+}
+
+/* 카드 내 버튼 스타일 */
+.card-cta-btn {
+    align-self: flex-start; /* 왼쪽 정렬 */
+    background: #333;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+.special-card:hover .card-cta-btn {
+    background: #FF007A; /* 호버 시 버튼 색상 변경 */
+}
+
+/* 모바일 대응 */
+@media (max-width: 600px) {
+    .special-img-box { width: 130px; height: 150px; padding: 10px; }
+    .special-info-box { padding: 15px; }
+    .special-info-box .model-name { font-size: 1.1rem; }
+    .special-info-box .price-tag { font-size: 1.4rem; margin-bottom: 10px; }
+    .card-cta-btn { font-size: 0.85rem; padding: 8px 15px; }
+}
 
         /* 5. 혜택 및 기타 섹션 */
         .benefit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 30px; }
@@ -113,25 +190,46 @@
         </div>
     </header>
 
-    <section id="daily-special">
-        <div class="container">
-            <h2 style="margin-bottom:30px;">🔥 <span id="today-date" style="color:#FF007A;">00월 00일</span> 단 하루 특가폰 🔥</h2>
+<section id="daily-special">
+    <div class="container">
+        <h2 style="margin-bottom:30px;">🔥 <span id="today-date" style="color:#FF007A;">00월 00일</span> 단 하루 특가폰 🔥</h2>
+        
+        <div class="special-container">
             <a href="#contact-form" class="special-card">
-                <div class="special-img">
-                    <img src="https://i.ibb.co/zhkdh6Dp/17.png" alt="특가폰 이미지" id="special-phone-img">
+                <div class="special-img-box">
+                    <img src="https://i.ibb.co/zhkdh6Dp/17.png" alt="iPhone 17 Pro">
                 </div>
-                <div class="special-info">
-                    <div class="special-tag">오늘만 이 가격!</div>
-                    <h2 id="special-model-name">iPhone 17 Pro</h2>
-                    <p style="color:#666; margin:0;">마루모바일 단독 특가</p>
-                    <div class="special-price">
-                        <span>1,698,400원</span> 실구매가 0원
-                    </div>
-                    <div class="special-btn">재고 확인 및 상담 신청 →</div>
+                <div class="special-info-box">
+                    <div class="model-name">iPhone 17 Pro</div>
+                    <div class="price-tag"><span>1,550,000원</span> <br>구매가 0원</div>
+                    <div class="card-cta-btn">재고 확인 및 상담 신청</div>
+                </div>
+            </a>
+
+            <a href="#contact-form" class="special-card">
+                <div class="special-img-box">
+                    <img src="https://i.ibb.co/fd9nKMPx/Gemini-Generated-Image-e3pgg7e3pgg7e3pg.png" alt="Galaxy S26 Ultra">
+                </div>
+                <div class="special-info-box">
+                    <div class="model-name">Galaxy S26 Ultra</div>
+                    <div class="price-tag"><span>1,690,000원</span> <br>구매가 0원</div>
+                    <div class="card-cta-btn">재고 확인 및 상담 신청</div>
+                </div>
+            </a>
+
+            <a href="#contact-form" class="special-card">
+                <div class="special-img-box">
+                    <img src="https://i.ibb.co/zhkdh6Dp/17.png" alt="iPhone 17">
+                </div>
+                <div class="special-info-box">
+                    <div class="model-name">iPhone 17 (256GB)</div>
+                    <div class="price-tag"><span>1,250,000원</span><br>구매가 0원</div>
+                    <div class="card-cta-btn">재고 확인 및 상담 신청</div>
                 </div>
             </a>
         </div>
-    </section>
+    </div>
+</section>
 
     <section id="benefits">
         <div class="container">
@@ -274,3 +372,4 @@
     </script>
 </body>
 </html>
+
