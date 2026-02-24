@@ -303,16 +303,16 @@ function closeIntro() {
     }, 500);
 }
 
-// [수정된] 메시지 창 닫기 및 재입력 준비 함수
+// [수정] 확인 버튼 클릭 시 다시 입력할 수 있게 초기화
 function closeMsg() {
     const msgBox = document.getElementById('form-message');
     const submitBtn = document.getElementById('submitBtn');
     const form = document.getElementById('consultationForm');
 
-    msgBox.style.display = 'none'; // 성공 메시지 숨기기
+    msgBox.style.display = 'none'; // 메시지 창 숨기기
     submitBtn.disabled = false;    // 버튼 다시 활성화
     submitBtn.innerText = "최대 혜택 견적 받기"; // 버튼 글자 복구
-    form.reset(); // 입력했던 내용 싹 지우기 (재입력 가능)
+    form.reset(); // 입력 내용 초기화
 }
 
 // 상담 신청 폼 처리
@@ -326,18 +326,16 @@ document.getElementById('consultationForm').onsubmit = async function(e) {
     const msgBox = document.getElementById('form-message');
     const msgName = document.getElementById('msg-name');
 
-    // 전송 중 버튼 잠금
     submitBtn.disabled = true;
     submitBtn.innerText = "전송 중...";
 
-    // 100% 검증된 전송 주소
     const googleFormUrl = "https://docs.google.com/forms/d/e/1FAIpQLSfX2lwlIllJWh0EGBlq_JcT6HBZyv0AUtQ6bwpeky200_MP4A/formResponse";
     
     const formData = new URLSearchParams();
-    // 이미지 기준 entry ID와 매칭 (ID가 바뀌지 않았는지 꼭 확인하세요)
-    formData.append("entry.1691889814", name);     // 성함
-    formData.append("entry.724726551", phone);      // 연락처
-    formData.append("entry.169055815", interest);   // 관심 상품
+    // ⚠️ 분석된 진짜 ID로 교체했습니다.
+    formData.append("entry.1490683093", name);      // 성함 ID
+    formData.append("entry.1801584533", phone);     // 연락처 ID
+    formData.append("entry.700319442", interest);   // 관심 상품 ID
 
     try {
         await fetch(googleFormUrl, {
@@ -347,12 +345,12 @@ document.getElementById('consultationForm').onsubmit = async function(e) {
             body: formData.toString()
         });
         
-        // 전송 시도 후 결과 표시
+        // 전송 시도 후 성공 메시지 표시
         msgName.innerText = name;
         msgBox.style.display = 'flex';
     } catch (err) {
         console.error("전송 오류:", err);
-        alert("신청 중 오류가 발생했습니다. 구글 폼 설정을 확인해주세요.");
+        alert("신청 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
         submitBtn.disabled = false;
         submitBtn.innerText = "최대 혜택 견적 받기";
     }
@@ -382,6 +380,7 @@ document.getElementById('consultationForm').onsubmit = async function(e) {
     </script>
 </body>
 </html>
+
 
 
 
