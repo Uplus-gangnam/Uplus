@@ -277,82 +277,83 @@
     <a href="tel:010-8080-3053" class="floating-cta">전화 상담하기 📞</a>
 
     <script>
-        // 인트로 닫기 기능
-        function closeIntro() {
-            const intro = document.getElementById('intro-overlay');
-            intro.classList.add('hidden');
-            window.scrollTo({ top: 0, behavior: 'instant' });
-            
-            // 인트로가 닫힐 때 채널톡 버튼 노출 강제
-            if (window.ChannelIO) {
-                window.ChannelIO('showChannelButton');
-            }
-            
-            setTimeout(() => {
-                const video = document.getElementById('intro-video');
-                if (video) video.pause();
-                intro.style.display = 'none';
-                
-                // 중복 확인 노출
-                if (window.ChannelIO) { 
-                    window.ChannelIO('showChannelButton');
-                }
-            }, 500);
-        }
+// 1. 날짜 업데이트 함수
+function updateDate() {
+    const now = new Date();
+    const m = (now.getMonth() + 1).toString().padStart(2, '0');
+    const d = now.getDate().toString().padStart(2, '0');
+    const el = document.getElementById('today-date');
+    if (el) el.innerText = m + '월 ' + d + '일';
+}
 
-        function updateDate() {
-            const now = new Date();
-            const m = (now.getMonth() + 1).toString().padStart(2, '0');
-            const d = now.getDate().toString().padStart(2, '0');
-            const el = document.getElementById('today-date');
-            if (el) el.innerText = m + '월 ' + d + '일';
-        }
+// 2. 인트로 닫기
+function closeIntro() {
+    const intro = document.getElementById('intro-overlay');
+    intro.classList.add('hidden');
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    if (window.ChannelIO) { window.ChannelIO('showChannelButton'); }
+    setTimeout(() => {
+        const video = document.getElementById('intro-video');
+        if (video) video.pause();
+        intro.style.display = 'none';
+    }, 500);
+}
 
-// 상담 신청 폼 처리
+// 3. 메시지 창 닫기 및 폼 초기화 (재입력 가능하게 함)
+function closeMsg() {
+    document.getElementById('form-message').style.display = 'none';
+    const submitBtn = document.getElementById('submitBtn');
+    submitBtn.disabled = false;
+    submitBtn.innerText = "최대 혜택 견적 받기";
+    document.getElementById('consultationForm').reset(); // 폼 초기화
+}
+
+// 4. 상담 신청 폼 처리
 document.getElementById('consultationForm').onsubmit = async function(e) {
     e.preventDefault();
     
-    // 버튼 비활성화 및 상태 표시
     const submitBtn = document.getElementById('submitBtn');
-    submitBtn.disabled = true;
-    submitBtn.innerText = "전송 중...";
-
     const name = document.getElementById('userName').value;
     const phone = document.getElementById('userPhone').value;
     const interest = document.getElementById('interest').value;
     const msgBox = document.getElementById('form-message');
     const msgName = document.getElementById('msg-name');
 
-    // ✅ 드디어 찾아낸 '진짜' 전송 주소입니다!
+    // 버튼 상태 변경
+    submitBtn.disabled = true;
+    submitBtn.innerText = "전송 중...";
+
+    // 구글 폼 주소 및 데이터 설정
     const googleFormUrl = "https://docs.google.com/forms/d/e/1FAIpQLSfX2lwlIllJWh0EGBlq_JcT6HBZyv0AUtQ6bwpeky200_MP4A/formResponse";
-    
     const formData = new URLSearchParams();
-    // ✅ 각 항목별 고유 ID와 입력값을 매칭합니다.
-    formData.append("entry.1691889814", name);     // 성함
-    formData.append("entry.724726551", phone);      // 연락처
-    formData.append("entry.169055815", interest);   // 관심 상품
+    formData.append("entry.1691889814", name);
+    formData.append("entry.724726551", phone);
+    formData.append("entry.169055815", interest);
 
     try {
         await fetch(googleFormUrl, {
             method: 'POST',
-            mode: 'no-cors', // 구글 폼 전송을 위한 필수 설정
+            mode: 'no-cors',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: formData.toString()
         });
         
-        // 전송 성공 시 화면 처리
+        // 전송 시도 후 결과창 표시
         msgName.innerText = name;
         msgBox.style.display = 'flex';
-        this.reset();
     } catch (err) {
-        console.error("전송 오류:", err);
-        alert("신청 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
-    } finally {
-        // 버튼 복구
+        console.error("전송 실패:", err);
+        alert("데이터 전송 중 오류가 발생했습니다. 구글 폼 설정을 확인해주세요.");
         submitBtn.disabled = false;
         submitBtn.innerText = "최대 혜택 견적 받기";
     }
 };
+
+// 페이지 로드 시 실행
+window.addEventListener('DOMContentLoaded', () => {
+    updateDate();
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+});
         // 4. 채널톡 로드 및 연동 (구조 최적화)
         (function() {
             var w = window;
@@ -402,6 +403,7 @@ document.getElementById('consultationForm').onsubmit = async function(e) {
     </script>
 </body>
 </html>
+
 
 
 
