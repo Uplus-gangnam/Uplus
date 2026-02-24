@@ -1,400 +1,276 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LG유플러스 공식 파트너 주식회사 마루모바일</title>
-    <style>
-/* 1. 버튼 광택 효과 (Shine) */
-.enter-btn, .submit-btn {
-    position: relative;
-    overflow: hidden;
-}
-.enter-btn::after {
-    content: '';
-    position: absolute;
-    top: -50%; left: -50%; width: 200%; height: 200%;
-    background: rgba(255,255,255,0.2);
-    transform: rotate(45deg);
-    transition: 0.5s;
-    left: -100%;
-}
-.enter-btn:hover::after {
-    left: 100%;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LG유플러스 공식 파트너 주식회사 마루모바일</title>
+    <style>
+        /* 1. 기본 스타일 및 레이아웃 */
+        body { font-family: 'Pretendard', sans-serif; margin: 0; padding: 0; line-height: 1.6; color: #333; }
+        section { padding: 60px 20px; text-align: center; }
+        .container { max-width: 800px; margin: 0 auto; }
+        html { scroll-behavior: smooth; }
 
-/* 2. 카드 강조 효과 (Glow 테두리) */
-.special-card {
-    border: 2px solid transparent;
-    background-image: linear-gradient(#fff, #fff), linear-gradient(to right, #eee, #eee);
-    background-origin: border-box;
-    background-clip: content-box, border-box;
-}
-.special-card:hover {
-    background-image: linear-gradient(#fff, #fff), linear-gradient(to right, #FF007A, #ff7eb3);
-}
+        /* 2. 인트로 스플래시 */
+        #intro-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 9999; color: white; text-align: center; transition: opacity 0.5s ease; overflow: hidden;
+        }
+        #intro-video {
+            position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%;
+            transform: translate(-50%, -50%); object-fit: cover; z-index: -2;
+        }
+        .video-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); z-index: -1; }
+        .intro-content { z-index: 1; position: relative; }
+        .intro-content h2 { font-size: 2.2rem; color: #FF007A; margin-bottom: 10px; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
+        .enter-btn {
+            background: #FF007A; color: white; padding: 15px 40px; font-size: 1.3rem; font-weight: bold;
+            border-radius: 50px; cursor: pointer; border: none; box-shadow: 0 4px 15px rgba(255, 0, 122, 0.4);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        .hidden { opacity: 0; pointer-events: none; }
 
-/* 3. 부드러운 배경 색상 */
-#daily-special {
-    background: linear-gradient(to bottom, #ffffff, #fff5f8);
-}
-      
-        /* 1. 기본 스타일 및 레이아웃 */
-        body { font-family: 'Pretendard', sans-serif; margin: 0; padding: 0; line-height: 1.6; color: #333; }
-        section { padding: 60px 20px; text-align: center; }
-        .container { max-width: 800px; margin: 0 auto; }
-        html { scroll-behavior: smooth; }
+        /* 3. 헤더 */
+        header { 
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                        url('https://i.ibb.co/fd9nKMPx/Gemini-Generated-Image-e3pgg7e3pgg7e3pg.png') 
+                        no-repeat center/cover;
+            color: white; padding: 80px 20px; text-align: center;
+        }
+        header h1 { font-size: 2.5rem; margin-bottom: 10px; color: #FF007A; }
 
-        /* 2. 인트로 스플래시 */
-        #intro-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 9999; color: white; text-align: center; transition: opacity 0.5s ease; overflow: hidden;
-        }
-        #intro-video {
-            position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%;
-            transform: translate(-50%, -50%); object-fit: cover; z-index: -2;
-        }
-        .video-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); z-index: -1; }
-        .intro-content { z-index: 1; position: relative; }
-        .intro-content h2 { font-size: 2.2rem; color: #FF007A; margin-bottom: 10px; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
-        .enter-btn {
-            background: #FF007A; color: white; padding: 15px 40px; font-size: 1.3rem; font-weight: bold;
-            border-radius: 50px; cursor: pointer; border: none; box-shadow: 0 4px 15px rgba(255, 0, 122, 0.4);
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-        .hidden { opacity: 0; pointer-events: none; }
+        /* 4. 오늘의 특가 섹션 (수정 반영됨) */
+        #daily-special { background: #fff; padding: 60px 20px; }
+        .special-card {
+            max-width: 800px; margin: 0 auto; border: 3px solid #FF007A; border-radius: 25px;
+            overflow: hidden; display: flex; align-items: center; text-decoration: none;
+            transition: transform 0.3s ease; background: #fff; box-shadow: 0 10px 30px rgba(255, 0, 122, 0.1);
+        }
+        .special-card:hover { transform: scale(1.02); }
+        .special-img { flex: 1; background: #f9f9f9; padding: 20px; display: flex; justify-content: center; align-items: center; }
+        .special-img img { max-width: 100%; height: auto; max-height: 250px; object-fit: contain; }
+        .special-info { flex: 1.2; padding: 30px; text-align: left; }
+        .special-tag { background: #FF007A; color: white; padding: 5px 12px; border-radius: 50px; font-size: 0.9rem; font-weight: bold; display: inline-block; margin-bottom: 10px; }
+        .special-info h2 { margin: 10px 0; font-size: 1.8rem; color: #333; line-height: 1.2; }
+        .special-price { font-size: 2.2rem; font-weight: 900; color: #FF007A; margin: 15px 0; }
+        .special-price span { font-size: 1rem; color: #888; text-decoration: line-through; margin-right: 10px; font-weight: normal; }
+        .special-btn { background: #333; color: white; padding: 10px 20px; border-radius: 8px; display: inline-block; font-weight: bold; }
 
-        /* 3. 헤더 */
-        header { 
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
-                        url('https://i.ibb.co/fd9nKMPx/Gemini-Generated-Image-e3pgg7e3pgg7e3pg.png') 
-                        no-repeat center/cover;
-            color: white; padding: 80px 20px; text-align: center;
-        }
-        header h1 { font-size: 2.5rem; margin-bottom: 10px; color: #FF007A; }
+        @media (max-width: 600px) {
+            .special-card { flex-direction: column; }
+            .special-info { text-align: center; }
+        }
 
-/* 오늘의 특가 섹션 - 리스트형 업그레이드 */
-#daily-special { background: #fdfdfd; padding: 60px 20px; }
-.special-container { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+        /* 5. 혜택 및 기타 섹션 */
+        .benefit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 30px; }
+        .benefit-item { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); transition: all 0.3s ease; cursor: pointer; }
+        .benefit-item:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(255, 0, 122, 0.15); }
+        .benefit-link { text-decoration: none; color: inherit; display: block; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
+        th, td { border: 1px solid #ddd; padding: 15px; text-align: center; }
+        th { background: #eee; }
 
-.special-card {
-    display: flex;
-    align-items: center;
-    background: white;
-    border: 2px solid #eee;
-    border-radius: 20px;
-    overflow: hidden;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.03);
-}
+        /* 6. QR 등록 섹션 */
+        #qr-registration { background: #f9f9f9; padding: 80px 20px; }
+        .qr-box { background: white; padding: 40px; border-radius: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.08); display: inline-block; position: relative; }
+        .bonus-badge { position: absolute; top: -20px; right: -20px; background: #FF007A; color: white; padding: 10px 20px; border-radius: 50px; font-weight: bold; animation: bounce 2s infinite; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        .qr-image-wrapper { display: inline-block; padding: 15px; border: 3px solid #FF007A; border-radius: 20px; transition: all 0.3s ease; background: #fff; cursor: pointer; }
+        .qr-image-wrapper img { width: 220px; height: 220px; display: block; }
 
-.special-card:hover {
-    transform: translateY(-5px);
-    border-color: #FF007A;
-    box-shadow: 0 10px 25px rgba(255, 0, 122, 0.1);
-}
-
-/* 이미지 영역 - 고정 사이즈 유지 */
-.special-img-box {
-    width: 180px; /* 고정 너비 */
-    height: 180px; /* 고정 높이 */
-    flex-shrink: 0; /* 사이즈 줄어듬 방지 */
-    background: #f9f9f9;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 15px;
-    border-right: 1px solid #eee;
-}
-
-.special-img-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain; /* 이미지가 잘리지 않고 틀 안에 꽉 차게 */
-}
-
-/* 텍스트 영역 */
-.special-info-box {
-    flex: 1;
-    padding: 20px 30px;
-    text-align: left;
-}
-
-.special-info-box .model-name {
-    font-size: 1.4rem;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 8px;
-}
-
-.special-info-box .price-tag {
-    font-size: 1.8rem;
-    font-weight: 900;
-    color: #FF007A;
-}
-
-.special-info-box .price-tag span {
-    font-size: 0.95rem;
-    color: #999;
-    text-decoration: line-through;
-    margin-right: 10px;
-    font-weight: normal;
-}
-
-/* 모바일 대응 */
-@media (max-width: 600px) {
-    .special-img-box { width: 120px; height: 120px; padding: 10px; }
-    .special-info-box { padding: 15px 20px; }
-    .special-info-box .model-name { font-size: 1.1rem; }
-    .special-info-box .price-tag { font-size: 1.4rem; }
-}
-        /* 5. 혜택 및 기타 섹션 */
-        .benefit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 30px; }
-        .benefit-item { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); transition: all 0.3s ease; cursor: pointer; }
-        .benefit-item:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(255, 0, 122, 0.15); }
-        .benefit-link { text-decoration: none; color: inherit; display: block; }
-        
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
-        th, td { border: 1px solid #ddd; padding: 15px; text-align: center; }
-        th { background: #eee; }
-
-        /* 6. QR 등록 섹션 */
-        #qr-registration { background: #f9f9f9; padding: 80px 20px; }
-        .qr-box { background: white; padding: 40px; border-radius: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.08); display: inline-block; position: relative; }
-        .bonus-badge { position: absolute; top: -20px; right: -20px; background: #FF007A; color: white; padding: 10px 20px; border-radius: 50px; font-weight: bold; animation: bounce 2s infinite; }
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        .qr-image-wrapper { display: inline-block; padding: 15px; border: 3px solid #FF007A; border-radius: 20px; transition: all 0.3s ease; background: #fff; cursor: pointer; }
-        .qr-image-wrapper img { width: 220px; height: 220px; display: block; }
-
-        /* 7. 상담 폼 및 기타 */
-        .form-container { max-width: 500px; margin: 0 auto; padding: 30px; border: 2px solid #FF007A; border-radius: 20px; background: #fff; box-shadow: 0 10px 30px rgba(255, 0, 122, 0.1); }
-        .input-group { text-align: left; margin-bottom: 15px; }
-        .input-group input, .input-group select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        .submit-btn { width: 100%; background: #FF007A; color: white; border: none; padding: 15px; font-size: 1.2rem; font-weight: bold; border-radius: 8px; cursor: pointer; }
-        .review { background: #fffbe6; padding: 20px; border-left: 5px solid #ffcc00; margin: 10px 0; text-align: left; }
-        .floating-cta { position: fixed; bottom: 0; left: 0; width: 100%; background: #FF007A; color: white; text-align: center; padding: 20px 0; font-size: 1.2rem; font-weight: bold; text-decoration: none; z-index: 1000; display: flex; align-items: center; justify-content: center; }
-        footer { padding: 40px 20px 100px; background: #333; color: #ccc; font-size: 0.8rem; }
-    </style>
+        /* 7. 상담 폼 및 기타 */
+        .form-container { max-width: 500px; margin: 0 auto; padding: 30px; border: 2px solid #FF007A; border-radius: 20px; background: #fff; box-shadow: 0 10px 30px rgba(255, 0, 122, 0.1); }
+        .input-group { text-align: left; margin-bottom: 15px; }
+        .input-group input, .input-group select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        .submit-btn { width: 100%; background: #FF007A; color: white; border: none; padding: 15px; font-size: 1.2rem; font-weight: bold; border-radius: 8px; cursor: pointer; }
+        .review { background: #fffbe6; padding: 20px; border-left: 5px solid #ffcc00; margin: 10px 0; text-align: left; }
+        .floating-cta { position: fixed; bottom: 0; left: 0; width: 100%; background: #FF007A; color: white; text-align: center; padding: 20px 0; font-size: 1.2rem; font-weight: bold; text-decoration: none; z-index: 1000; display: flex; align-items: center; justify-content: center; }
+        footer { padding: 40px 20px 100px; background: #333; color: #ccc; font-size: 0.8rem; }
+    </style>
 </head>
 <body>
 
-    <div id="intro-overlay">
-        <video autoplay muted loop playsinline poster="https://i.ibb.co/xqrbHbR4/Simply-U-Design-Source-Simply-U-Bl-Mg.png" id="intro-video">
-            <source src="Galaxy.mp4" type="video/mp4">
-        </video>
-        <div class="video-overlay"></div>
-        <div class="intro-content">
-            <p>LG U+ 공식 파트너 주식회사 마루모바일</p>
-            <h2>쓰던폰 그대로<br>20만원 즉시 지급!</h2>
-            <p>대한민국 어디서나 개통 가능</p>
-            <button class="enter-btn" onclick="closeIntro()">네, 혜택 확인하기</button>
-        </div>
-    </div>
+    <div id="intro-overlay">
+        <video autoplay muted loop playsinline poster="https://i.ibb.co/xqrbHbR4/Simply-U-Design-Source-Simply-U-Bl-Mg.png" id="intro-video">
+            <source src="Galaxy.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay"></div>
+        <div class="intro-content">
+            <p>LG U+ 공식 파트너 주식회사 마루모바일</p>
+            <h2>쓰던폰 그대로<br>20만원 즉시 지급!</h2>
+            <p>대한민국 어디서나 개통 가능</p>
+            <button class="enter-btn" onclick="closeIntro()">네, 혜택 확인하기</button>
+        </div>
+    </div>
 
-    <header>
-        <div class="container">
-            <h1>LG U+ 공식 파트너</h1>
-            <p>주식회사 마루모바일 페이지 방문을 환영합니다</p>
-        </div>
-    </header>
+    <header>
+        <div class="container">
+            <h1>LG U+ 공식 파트너</h1>
+            <p>주식회사 마루모바일 페이지 방문을 환영합니다</p>
+        </div>
+    </header>
 
-<section id="daily-special">
-    <div class="container">
-        <h2 style="margin-bottom:30px;">🔥 <span id="today-date" style="color:#FF007A;">00월 00일</span> 오늘의 특가폰 🔥</h2>
-        
-        <div class="special-container">
-            <a href="#contact-form" class="special-card">
-                <div class="special-img-box">
-                    <img src="https://i.ibb.co/zhkdh6Dp/17.png" alt="iPhone 17 Pro">
-                </div>
-                <div class="special-info-box">
-                    <div class="model-name">iPhone 17 Pro</div>
-                    <div class="price-tag"><span>1,550,000원</span> <br> 실구매가 0원</div>
-                    <p style="margin:5px 0 0; font-size:0.9rem; color:#888;">#즉시개통 #사은품증정</p>
-                </div>
-            </a>
+    <section id="daily-special">
+        <div class="container">
+            <h2 style="margin-bottom:30px;">🔥 <span id="today-date" style="color:#FF007A;">00월 00일</span> 단 하루 특가폰 🔥</h2>
+            <a href="#contact-form" class="special-card">
+                <div class="special-img">
+                    <img src="https://i.ibb.co/zhkdh6Dp/17.png" alt="특가폰 이미지" id="special-phone-img">
+                </div>
+                <div class="special-info">
+                    <div class="special-tag">오늘만 이 가격!</div>
+                    <h2 id="special-model-name">iPhone 17 Pro</h2>
+                    <p style="color:#666; margin:0;">마루모바일 단독 특가</p>
+                    <div class="special-price">
+                        <span>1,698,400원</span> 실구매가 0원
+                    </div>
+                    <div class="special-btn">재고 확인 및 상담 신청 →</div>
+                </div>
+            </a>
+        </div>
+    </section>
 
-            <a href="#contact-form" class="special-card">
-                <div class="special-img-box">
-                    <img src="https://i.ibb.co/fd9nKMPx/Gemini-Generated-Image-e3pgg7e3pgg7e3pg.png" alt="Galaxy S26 Ultra">
-                </div>
-                <div class="special-info-box">
-                    <div class="model-name">Galaxy S26 Ultra</div>
-                    <div class="price-tag"><span>1,690,000원</span> <br> 실구매가 0원</div>
-                    <p style="margin:5px 0 0; font-size:0.9rem; color:#888;">#김포최저가 #재고확보</p>
-                </div>
-            </a>
+    <section id="benefits">
+        <div class="container">
+            <h2>💰 2026년 HOT 특가 💰</h2>
+            <div class="benefit-grid">
+                <a href="#contact-form" class="benefit-link">
+                    <div class="benefit-item">
+                        <h3>💰 S26 Ultra</h3>
+                        <p>김포시 최저가<br>0원</p>
+                    </div>
+                </a>
+                <a href="#contact-form" class="benefit-link">
+                    <div class="benefit-item">
+                        <h3>🚀 인터넷 동시 가입</h3>
+                        <p>현금 100만원 지원<br>1G + TV프리미엄</p>
+                    </div>
+                </a>
+                <a href="#contact-form" class="benefit-link">
+                    <div class="benefit-item">
+                        <h3>👨‍👩‍👧‍👦 아이폰17 전모델</h3>
+                        <p>기기 부족 사전 예약<br>실구매가 0원</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
 
-            <a href="#contact-form" class="special-card">
-                <div class="special-img-box">
-                    <img src="https://i.ibb.co/zhkdh6Dp/17.png" alt="iPhone 17">
-                </div>
-                <div class="special-info-box">
-                    <div class="model-name">iPhone 17 일반</div>
-                    <div class="price-tag"><span>1,250,000원</span> <br> 실구매가 0원</div>
-                    <p style="margin:5px 0 0; font-size:0.9rem; color:#888;">#번호이동특가 #선착순</p>
-                </div>
-            </a>
-        </div>
-    </div>
-</section>
+    <section>
+        <div class="container">
+            <h2>인기 가입 요금제</h2>
+            <table>
+                <tr><th>요금제</th><th>데이터 제공량</th><th>월 요금</th></tr>
+                <tr><td>5G 미니</td><td>7G+400Kb 무제한</td><td>24,750원</td></tr>
+                <tr><td>5G 프리미엄에센셜</td><td>데이터 무제한</td><td>47,950원</td></tr>
+                <tr><td>5G 유튜브 프리미엄</td><td>데이터+유튜브 무제한</td><td>73,500원</td></tr>
+            </table>
+        </div>
+    </section>
 
-    <section id="benefits">
-        <div class="container">
-            <h2>💰 주요 혜택 💰</h2>
-            <div class="benefit-grid">
-                <a href="#contact-form" class="benefit-link">
-                    <div class="benefit-item">
-                        <h3>💰 인터넷 가입 최대 지원 </h3>
-                        <p>전국 어디든 가입 가능 <br>0원</p>
-                    </div>
-                </a>
-                <a href="#contact-form" class="benefit-link">
-                    <div class="benefit-item">
-                        <h3>🚀 TV + Wifi 동시 가입</h3>
-                        <p>최대 100만원 지원<br> 개통 즉시 지급</p>
-                    </div>
-                </a>
-                <a href="#contact-form" class="benefit-link">
-                    <div class="benefit-item">
-                        <h3>👨‍👩‍👧‍👦 아이폰17 재고 문의</h3>
-                        <p>전국 최대 물량 보유<br>구매 상담 문의</p>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
+    <section id="qr-registration">
+        <div class="container">
+            <div class="qr-box">
+                <div class="bonus-badge">🎁 사은품 100% 증정!</div>
+                <h2>📲 U+ 고객 사전 등록</h2>
+                <p>아래 QR을 통해 등록하시면 <strong>추가 지원금</strong>을 드립니다.</p>
+                <a href="https://ucrm.lguplus.co.kr/mbl/v2/rcmd/moveInfo?param=bWFydTczNDAmMjAyNjAyMjMwNDM0NDAmUVJDRF8%3D" target="_blank" class="qr-image-wrapper">
+                    <img src="https://i.ibb.co/RGxzMw8s/21o-Sr.jpg" alt="QR코드">
+                </a>
+                <p style="margin-top:15px; font-size:0.9rem; color:#666;">이미지를 클릭하거나 QR을 스캔하세요</p>
+            </div>
+        </div>
+    </section>
 
-    <section>
-        <div class="container">
-            <h2>인기 가입 요금제</h2>
-            <table>
-                <tr><th>요금제</th><th>데이터 제공량</th><th>월 요금</th></tr>
-                <tr><td>5G 미니</td><td>7G+400Kb 무제한</td><td>24,750원</td></tr>
-                <tr><td>5G 프리미엄에센셜</td><td>데이터 무제한</td><td>47,950원</td></tr>
-                <tr><td>5G 유튜브 프리미엄</td><td>데이터+유튜브 무제한</td><td>73,500원</td></tr>
-            </table>
-        </div>
-    </section>
+    <section id="contact-form">
+        <div class="container">
+            <div class="form-container">
+                <h2>🎁 최저가 상담 신청</h2>
+                <p>전문 상담사가 5분 내로 연락드립니다!</p>
+                <form id="consultationForm">
+                    <div class="input-group">
+                        <label>성함</label>
+                        <input type="text" id="userName" placeholder="성함을 입력해주세요" required>
+                    </div>
+                    <div class="input-group">
+                        <label>연락처</label>
+                        <input type="tel" id="userPhone" placeholder="010-0000-0000" required>
+                    </div>
+                    <div class="input-group">
+                        <label>관심 상품</label>
+                        <select id="interest">
+                            <option value="phone">휴대폰</option>
+                            <option value="internet">인터넷+TV</option>
+                        </select>
+                    </div>
+                    <div class="privacy-check" style="text-align:left; font-size:0.85rem; margin:15px 0;">
+                        <input type="checkbox" id="agree" required> <label for="agree">개인정보 수집 동의 (필수)</label>
+                    </div>
+                    <button type="submit" class="submit-btn">최대 혜택 견적 받기</button>
+                </form>
+            </div>
+        </div>
+    </section>
 
-    <section id="qr-registration">
-        <div class="container">
-            <div class="qr-box">
-                <div class="bonus-badge">🎁 사은품 100% 증정!</div>
-                <h2>📲 U+ 고객 사전 등록</h2>
-                <p>아래 QR을 통해 등록하시면 <strong>추가 지원금</strong>을 드립니다.</p>
-                <a href="https://ucrm.lguplus.co.kr/mbl/v2/rcmd/moveInfo?param=bWFydTczNDAmMjAyNjAyMjMwNDM0NDAmUVJDRF8%3D" target="_blank" class="qr-image-wrapper">
-                    <img src="https://i.ibb.co/RGxzMw8s/21o-Sr.jpg" alt="QR코드">
-                </a>
-                <p style="margin-top:15px; font-size:0.9rem; color:#666;">이미지를 클릭하거나 QR을 스캔하세요</p>
-            </div>
-        </div>
-    </section>
+    <section style="background:#f4f4f4;">
+        <div class="container">
+            <h2>실제 개통 후기</h2>
+            <div class="review">"친절한 상담과 당일 설치! 사은품도 바로 들어왔어요." - 이OO 고객님</div>
+            <div class="review">"결합 할인 덕분에 통신비가 반으로 줄었습니다." - 박OO 고객님</div>
+        </div>
+    </section>
 
-    <section id="contact-form">
-        <div class="container">
-            <div class="form-container">
-                <h2>🎁 최저가 상담 신청</h2>
-                <p>전문 상담사가 5분 내로 연락드립니다!</p>
-                <form id="consultationForm">
-                    <div class="input-group">
-                        <label>성함</label>
-                        <input type="text" id="userName" placeholder="성함을 입력해주세요" required>
-                    </div>
-                    <div class="input-group">
-                        <label>연락처</label>
-                        <input type="tel" id="userPhone" placeholder="010-0000-0000" required>
-                    </div>
-                    <div class="input-group">
-                        <label>관심 상품</label>
-                        <select id="interest">
-                            <option value="phone">휴대폰</option>
-                            <option value="internet">인터넷+TV</option>
-                        </select>
-                    </div>
-                    <div class="privacy-check" style="text-align:left; font-size:0.85rem; margin:15px 0;">
-                        <input type="checkbox" id="agree" required> <label for="agree">개인정보 수집 동의 (필수)</label>
-                    </div>
-                    <button type="submit" class="submit-btn">최대 혜택 견적 받기</button>
-                </form>
-            </div>
-        </div>
-    </section>
+    <footer>
+        <p>© 2026 LG유플러스 공식 파트너 주식회사 마루모바일 | 사업자번호: 000-00-00000</p>
+    </footer>
 
-    <section style="background:#f4f4f4;">
-        <div class="container">
-            <h2>실제 개통 후기</h2>
-            <div class="review">"친절한 상담과 당일 설치! 사은품도 바로 들어왔어요." - 이OO 고객님</div>
-            <div class="review">"결합 할인 덕분에 통신비가 반으로 줄었습니다." - 박OO 고객님</div>
-        </div>
-    </section>
+    <a href="tel:010-8080-3053" class="floating-cta">지금 바로 전화 상담하기 (클릭)</a>
 
-    <footer>
-        <p>© 2026 LG유플러스 공식 파트너 주식회사 마루모바일 | 사업자번호: 000-00-00000</p>
-    </footer>
+    <script>
+        // 1. 인트로 닫기
+        function closeIntro() {
+            const intro = document.getElementById('intro-overlay');
+            intro.classList.add('hidden');
+            setTimeout(() => {
+                const video = document.getElementById('intro-video');
+                if (video) video.pause();
+                intro.style.display = 'none';
+            }, 500);
+        }
 
-    <a href="tel:010-8080-3053" class="floating-cta">지금 바로 전화 상담하기 (클릭)</a>
+        // 2. 날짜 자동 업데이트 (오늘 날짜 반영)
+        function updateTodayDate() {
+            const now = new Date();
+            const month = (now.getMonth() + 1).toString().padStart(2, '0');
+            const day = now.getDate().toString().padStart(2, '0');
+            const dateString = month + '월 ' + day + '일';
+            const dateElement = document.getElementById('today-date');
+            if (dateElement) dateElement.innerText = dateString;
+        }
 
-    <script>
-// 인트로 닫기 기능 수정
-function closeIntro() {
-    const intro = document.getElementById('intro-overlay');
-    
-    // 1. 인트로 투명하게 만들기
-    intro.classList.add('hidden'); 
-    
-    // 2. [추가] 입장 버튼을 누르는 순간 즉시 페이지 최상단으로 강제 이동
-    window.scrollTo({
-        top: 0,
-        left: 0,
-        behavior: 'instant' // 부드러운 효과 없이 즉시 이동하여 위치 오류 방지
-    });
-    
-    // 3. 인트로가 사라진 후 리소스 정리
-    setTimeout(() => {
-        const video = document.getElementById('intro-video');
-        if (video) video.pause();
-        intro.style.display = 'none';
-        
-        // 혹시 모를 오차를 위해 제거 후 한 번 더 최상단 확인
-        document.documentElement.scrollTop = 0;
-    }, 500);
-}
+        // 3. 폼 제출 이벤트
+        document.getElementById('consultationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('userName').value;
+            alert(name + '님, 상담 신청이 접수되었습니다! 곧 연락드리겠습니다.');
+            this.reset();
+        });
 
-        // 2. 날짜 자동 업데이트 (오늘 날짜 반영)
-        function updateTodayDate() {
-            const now = new Date();
-            const month = (now.getMonth() + 1).toString().padStart(2, '0');
-            const day = now.getDate().toString().padStart(2, '0');
-            const dateString = month + '월 ' + day + '일';
-            const dateElement = document.getElementById('today-date');
-            if (dateElement) dateElement.innerText = dateString;
-        }
+        // 페이지 로드 시 실행
+        window.addEventListener('DOMContentLoaded', updateTodayDate);
 
-        // 3. 폼 제출 이벤트
-        document.getElementById('consultationForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const name = document.getElementById('userName').value;
-            alert(name + '님, 상담 신청이 접수되었습니다! 곧 연락드리겠습니다.');
-            this.reset();
-        });
-
-        // 페이지 로드 시 실행
-        window.addEventListener('DOMContentLoaded', updateTodayDate);
-
-        // 4. 채널톡 연동
-        (function(){var w=window;if(w.ChannelIO){return w.console.error("ChannelIO script included twice.");}var ch=function(){ch.c(arguments);};ch.q=[];ch.c=function(args){ch.q.push(args);};w.ChannelIO=ch;function l(){if(w.ChannelIOInitialized){return;}w.ChannelIOInitialized=true;var s=document.createElement("script");s.type="text/javascript";s.async=true;s.src="https://cdn.channel.io/plugin/ch-plugin-web.js";var x=document.getElementsByTagName("script")[0];if(x.parentNode){x.parentNode.insertBefore(s,x);}}if(document.readyState==="complete"){l();}else{w.addEventListener("DOMContentLoaded",l);w.addEventListener("load",l);}})();
-        ChannelIO('boot', {
-            "pluginKey": "b58cf3f5-9d23-482b-8505-d54f0238d53a",
-            "pluginProps": {
-                "mobileMessengerProps": { "yOffset": 80, "xOffset": 20 },
-                "desktopMessengerProps": { "yOffset": 30, "xOffset": 30 }
-            }
-        });
-    </script>
+        // 4. 채널톡 연동
+        (function(){var w=window;if(w.ChannelIO){return w.console.error("ChannelIO script included twice.");}var ch=function(){ch.c(arguments);};ch.q=[];ch.c=function(args){ch.q.push(args);};w.ChannelIO=ch;function l(){if(w.ChannelIOInitialized){return;}w.ChannelIOInitialized=true;var s=document.createElement("script");s.type="text/javascript";s.async=true;s.src="https://cdn.channel.io/plugin/ch-plugin-web.js";var x=document.getElementsByTagName("script")[0];if(x.parentNode){x.parentNode.insertBefore(s,x);}}if(document.readyState==="complete"){l();}else{w.addEventListener("DOMContentLoaded",l);w.addEventListener("load",l);}})();
+        ChannelIO('boot', {
+            "pluginKey": "b58cf3f5-9d23-482b-8505-d54f0238d53a",
+            "pluginProps": {
+                "mobileMessengerProps": { "yOffset": 80, "xOffset": 20 },
+                "desktopMessengerProps": { "yOffset": 30, "xOffset": 30 }
+            }
+        });
+    </script>
 </body>
 </html>
-
