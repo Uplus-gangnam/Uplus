@@ -5,6 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>LG유플러스 공식 파트너 주식회사 마루모바일</title>
     <style>
+
+        /* 채널톡 버튼이 인트로보다 위에 오도록 설정 */
+#ch-plugin { z-index: 10000 !important; }
+
+/* 하단 고정 바 때문에 body에 여백을 주어 버튼이 가려지지 않게 함 */
+body { padding-bottom: 70px; } 
+
+/* 인트로 오버레이 z-index 살짝 하향 조정 */
+#intro-overlay { z-index: 9998; }
+        
         /* 1. 기본 스타일 및 레이아웃 최적화 */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         html, body { 
@@ -355,31 +365,46 @@ document.getElementById('consultationForm').onsubmit = async function(e) {
         submitBtn.innerText = "최대 혜택 견적 받기";
     }
 };
-        // 채널톡 부팅
-        window.ChannelIO('boot', {
-            "pluginKey": "b58cf3f5-9d23-482b-8505-d54f0238d53a",
-            "pluginProps": {
-                "mobileMessengerProps": {
-                    "yOffset": 100 // 모바일 플로팅 버튼보다 높게 설정
-                },
-                "desktopMessengerProps": {
-                    "yOffset": 30,
-                    "xOffset": 30
-                }
-            }
-        });
+// 1. 채널톡 부팅 설정 수정
+window.ChannelIO('boot', {
+    "pluginKey": "b58cf3f5-9d23-482b-8505-d54f0238d53a",
+    "pluginProps": {
+        "mobileMessengerProps": {
+            "yOffset": 120 // '전화 상담하기' 바보다 훨씬 위로 올림 (기존 100에서 상향)
+        },
+        "desktopMessengerProps": {
+            "yOffset": 30,
+            "xOffset": 30
+        }
+    }
+});
 
-        // 로드 완료 후 버튼 강제 표시 시도
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                if (window.ChannelIO) {
-                    window.ChannelIO('showChannelButton');
-                }
-            }, 1000);
-        });
+// 2. 인트로 닫기 함수 내 로직 강화
+function closeIntro() {
+    const intro = document.getElementById('intro-overlay');
+    intro.classList.add('hidden');
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    
+    // 인트로가 닫히는 즉시 버튼 강제 노출
+    if (window.ChannelIO) {
+        window.ChannelIO('showChannelButton');
+    }
+    
+    setTimeout(() => {
+        const video = document.getElementById('intro-video');
+        if (video) video.pause();
+        intro.style.display = 'none';
+        
+        // 완전히 사라진 후 한 번 더 확인 노출
+        if (window.ChannelIO) { 
+            window.ChannelIO('showChannelButton');
+        }
+    }, 500);
+}
     </script>
 </body>
 </html>
+
 
 
 
