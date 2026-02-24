@@ -312,7 +312,7 @@
 document.getElementById('consultationForm').onsubmit = async function(e) {
     e.preventDefault();
     
-    // 버튼 비활성화 (중복 클릭 방지)
+    // 버튼 비활성화 및 상태 표시
     const submitBtn = document.getElementById('submitBtn');
     submitBtn.disabled = true;
     submitBtn.innerText = "전송 중...";
@@ -323,11 +323,11 @@ document.getElementById('consultationForm').onsubmit = async function(e) {
     const msgBox = document.getElementById('form-message');
     const msgName = document.getElementById('msg-name');
 
-    // 1. 고객님의 실제 폼 ID를 반영한 정확한 전송 주소입니다.
-    const googleFormUrl = "https://docs.google.com/forms/d/1FjT2BkR5kURhbG7ilCYgAw4vgXBtbhWB50pZD3jUpNg/formResponse";
+    // ✅ 드디어 찾아낸 '진짜' 전송 주소입니다!
+    const googleFormUrl = "https://docs.google.com/forms/d/e/1FAIpQLSfX2lwlIllJWh0EGBlq_JcT6HBZyv0AUtQ6bwpeky200_MP4A/formResponse";
     
     const formData = new URLSearchParams();
-    // 2. 항목 ID 매칭 (만약 데이터가 여전히 안 들어온다면 아래 3번 항목을 확인하세요)
+    // ✅ 각 항목별 고유 ID와 입력값을 매칭합니다.
     formData.append("entry.1691889814", name);     // 성함
     formData.append("entry.724726551", phone);      // 연락처
     formData.append("entry.169055815", interest);   // 관심 상품
@@ -335,11 +335,12 @@ document.getElementById('consultationForm').onsubmit = async function(e) {
     try {
         await fetch(googleFormUrl, {
             method: 'POST',
-            mode: 'no-cors',
+            mode: 'no-cors', // 구글 폼 전송을 위한 필수 설정
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: formData.toString()
         });
         
+        // 전송 성공 시 화면 처리
         msgName.innerText = name;
         msgBox.style.display = 'flex';
         this.reset();
@@ -347,6 +348,7 @@ document.getElementById('consultationForm').onsubmit = async function(e) {
         console.error("전송 오류:", err);
         alert("신청 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
     } finally {
+        // 버튼 복구
         submitBtn.disabled = false;
         submitBtn.innerText = "최대 혜택 견적 받기";
     }
@@ -400,6 +402,7 @@ document.getElementById('consultationForm').onsubmit = async function(e) {
     </script>
 </body>
 </html>
+
 
 
 
