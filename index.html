@@ -4,21 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>LG유플러스 공식 파트너 주식회사 마루모바일</title>
-    <!-- Firebase SDK 로드 -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-
-        const firebaseConfig = JSON.parse(__firebase_config);
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'maru-mobile';
-
-        window.maruDB = { db, collection, addDoc, serverTimestamp, auth, signInAnonymously, appId };
-        signInAnonymously(auth).catch((error) => console.error("Firebase 인증 실패:", error));
-    </script>
     <style>
         /* 1. 기본 스타일 및 레이아웃 최적화 */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -105,7 +90,7 @@
         .benefit-item h3 { margin-top: 0; color: #FF007A; font-size: 1.2rem; }
         .benefit-item p { font-size: 0.95rem; color: #666; margin: 10px 0 0; }
 
-        /* 6. QR 등록 섹션 (텍스트 및 모바일 정렬 보정) */
+        /* 6. QR 등록 섹션 */
         #qr-registration { background: #f9f9f9; }
         .qr-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; width: 100%; margin-top: 20px; justify-content: center; }
         .qr-box { 
@@ -117,7 +102,6 @@
         }
         .qr-box:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(255, 0, 122, 0.08); }
         .qr-box h3 { font-size: 1.1rem; margin-bottom: 10px; color: #333; }
-        /* 텍스트 이상하게 끊기는 현상 수정 */
         .qr-box p { 
             font-size: 0.85rem; color: #777; margin-bottom: 20px; 
             min-height: 45px; 
@@ -223,7 +207,8 @@
                     <h3>🚀 인터넷 + TV 결합</h3>
                     <p>현금 100만원 지원<br>개통 당일 즉시 지급</p>
                 </a>
-                <div class="benefit-item" onclick="ChannelIO('showMessenger')">
+                <!-- 채널톡 상담 직접 버튼 -->
+                <div class="benefit-item" onclick="if(window.ChannelIO) { ChannelIO('showMessenger'); }">
                     <h3>💬 실시간 채팅 상담</h3>
                     <p>문의사항은 채널톡으로!<br>친절 전문 상담원 대기중</p>
                 </div>
@@ -265,7 +250,7 @@
         </div>
     </section>
 
-    <!-- 상담 신청 -->
+    <!-- 상담 신청 (구글 폼 연동) -->
     <section id="contact-form">
         <div class="container">
             <div class="form-container">
@@ -277,9 +262,13 @@
                     <label style="display:block; text-align:left; font-weight:bold; font-size:0.8rem; margin-bottom:5px; color:#333;">개인정보 수집 및 이용 동의 (필수)</label>
                     <div class="privacy-notice-box">주식회사 마루모바일은 상담 신청을 위해 아래와 같이 개인정보를 수집합니다.<br><br>1. 수집 항목: 성함, 연락처, 관심 상품<br>2. 수집 목적: 상담 및 서비스 안내, 이벤트 정보 제공<br>3. 보유 및 이용 기간: 상담 완료 후 1년 이내 (고객 요청 시 즉시 파기)</div>
                     <div class="privacy-check"><input type="checkbox" id="agree" required><label for="agree">내용을 확인했으며, 동의합니다.</label></div>
-                    <button type="submit" class="submit-btn">최대 혜택 견적 받기</button>
+                    <button type="submit" class="submit-btn" id="submitBtn">최대 혜택 견적 받기</button>
                 </form>
-                <div id="form-message"><h3 style="color:#FF007A; margin-bottom:10px;">신청 완료! 🚀</h3><p><span id="msg-name" style="font-weight:bold;"></span>님, 정상 접수되었습니다.<br>담당 상담사가 신속히 연락드릴게요!</p><button class="submit-btn" style="margin-top:20px; width:auto; padding:10px 30px;" onclick="closeMsg()">확인</button></div>
+                <div id="form-message">
+                    <h3 style="color:#FF007A; margin-bottom:10px;">신청 완료! 🚀</h3>
+                    <p><span id="msg-name" style="font-weight:bold;"></span>님, 정상 접수되었습니다.<br>담당 상담사가 신속히 연락드릴게요!</p>
+                    <button class="submit-btn" style="margin-top:20px; width:auto; padding:10px 30px;" onclick="closeMsg()">확인</button>
+                </div>
             </div>
         </div>
     </section>
@@ -288,20 +277,26 @@
     <a href="tel:010-8080-3053" class="floating-cta">전화 상담하기 📞</a>
 
     <script>
+        // 인트로 닫기 기능
         function closeIntro() {
             const intro = document.getElementById('intro-overlay');
             intro.classList.add('hidden');
             window.scrollTo({ top: 0, behavior: 'instant' });
             
-            // 대문 닫을 때 채널톡 버튼을 확실하게 표시
+            // 인트로가 닫힐 때 채널톡 버튼 노출 강제
             if (window.ChannelIO) {
-                ChannelIO('showChannelButton');
+                window.ChannelIO('showChannelButton');
             }
             
             setTimeout(() => {
                 const video = document.getElementById('intro-video');
                 if (video) video.pause();
                 intro.style.display = 'none';
+                
+                // 중복 확인 노출
+                if (window.ChannelIO) { 
+                    window.ChannelIO('showChannelButton');
+                }
             }, 500);
         }
 
@@ -313,6 +308,7 @@
             if (el) el.innerText = m + '월 ' + d + '일';
         }
 
+        // 상담 신청 폼 처리
         document.getElementById('consultationForm').onsubmit = async function(e) {
             e.preventDefault();
             const name = document.getElementById('userName').value;
@@ -320,37 +316,75 @@
             const interest = document.getElementById('interest').value;
             const msgBox = document.getElementById('form-message');
             const msgName = document.getElementById('msg-name');
+
+            const googleFormUrl = "https://docs.google.com/forms/d/e/YOUR_FORM_ID/formResponse";
+            const formData = new FormData();
+            formData.append("entry.123456789", name); 
+            formData.append("entry.987654321", phone);
+            formData.append("entry.112233445", interest);
+
+            msgName.innerText = name;
+            msgBox.style.display = 'flex';
+            
             try {
-                if (!window.maruDB) throw new Error("DB 준비 중");
-                const { db, collection, addDoc, serverTimestamp, appId } = window.maruDB;
-                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'consultations'), {
-                    name, phone, interest, createdAt: serverTimestamp()
-                });
-                msgName.innerText = name;
-                msgBox.style.display = 'flex';
+                await fetch(googleFormUrl, { method: 'POST', mode: 'no-cors', body: formData });
                 this.reset();
-            } catch (err) {
-                console.error(err);
-                alert("오류가 발생했습니다. 전화상담을 이용해 주세요.");
-            }
+            } catch (err) { console.error(err); }
         };
 
         function closeMsg() { document.getElementById('form-message').style.display = 'none'; }
+        
         window.addEventListener('DOMContentLoaded', () => {
             updateDate();
             window.scrollTo(0, 0);
             if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
         });
 
-        // 채널톡 초기화
-        (function(){var w=window;if(w.ChannelIO){return;}var ch=function(){ch.c(arguments);};ch.q=[];ch.c=function(args){ch.q.push(args);};w.ChannelIO=ch;function l(){var s=document.createElement("script");s.type="text/javascript";s.async=true;s.src="https://cdn.channel.io/plugin/ch-plugin-web.js";var x=document.getElementsByTagName("script")[0];if(x.parentNode){x.parentNode.insertBefore(s,x);}}if(document.readyState==="complete"){l();}else{w.addEventListener("DOMContentLoaded",l);w.addEventListener("load",l);}})();
-        
-        ChannelIO('boot', { 
+        // 4. 채널톡 로드 및 연동 (구조 최적화)
+        (function() {
+            var w = window;
+            if (w.ChannelIO) { return; }
+            var ch = function() { ch.c(arguments); };
+            ch.q = [];
+            ch.c = function(args) { ch.q.push(args); };
+            w.ChannelIO = ch;
+            function l() {
+                if (w.ChannelIOInitialized) { return; }
+                w.ChannelIOInitialized = true;
+                var s = document.createElement('script');
+                s.type = 'text/javascript';
+                s.async = true;
+                s.src = 'https://cdn.channel.io/plugin/ch-plugin-web.js';
+                s.charset = 'UTF-8';
+                var x = document.getElementsByTagName('script')[0];
+                x.parentNode.insertBefore(s, x);
+            }
+            if (document.readyState === 'complete') { l(); }
+            else if (window.attachEvent) { window.attachEvent('onload', l); }
+            else { window.addEventListener('DOMContentLoaded', l, false); window.addEventListener('load', l, false); }
+        })();
+
+        // 채널톡 부팅
+        window.ChannelIO('boot', {
             "pluginKey": "b58cf3f5-9d23-482b-8505-d54f0238d53a",
             "pluginProps": {
-                "mobileMessengerProps": { "yOffset": 85 },
-                "desktopMessengerProps": { "yOffset": 30, "xOffset": 30 }
+                "mobileMessengerProps": {
+                    "yOffset": 100 // 모바일 플로팅 버튼보다 높게 설정
+                },
+                "desktopMessengerProps": {
+                    "yOffset": 30,
+                    "xOffset": 30
+                }
             }
+        });
+
+        // 로드 완료 후 버튼 강제 표시 시도
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                if (window.ChannelIO) {
+                    window.ChannelIO('showChannelButton');
+                }
+            }, 1000);
         });
     </script>
 </body>
