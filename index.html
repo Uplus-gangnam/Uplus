@@ -166,6 +166,40 @@
         .review { background: #fffbe6; padding: 20px; border-left: 5px solid #ffcc00; margin: 10px 0; text-align: left; }
         .floating-cta { position: fixed; bottom: 0; left: 0; width: 100%; background: #FF007A; color: white; text-align: center; padding: 20px 0; font-size: 1.2rem; font-weight: bold; text-decoration: none; z-index: 1000; display: flex; align-items: center; justify-content: center; }
         footer { padding: 40px 20px 100px; background: #333; color: #ccc; font-size: 0.8rem; }
+
+/* 1. 버튼 광택 효과 (Shine) */
+.enter-btn, .submit-btn {
+    position: relative;
+    overflow: hidden;
+}
+.enter-btn::after {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%; width: 200%; height: 200%;
+    background: rgba(255,255,255,0.2);
+    transform: rotate(45deg);
+    transition: 0.5s;
+    left: -100%;
+}
+.enter-btn:hover::after {
+    left: 100%;
+}
+
+/* 2. 카드 강조 효과 (Glow 테두리) */
+.special-card {
+    border: 2px solid transparent;
+    background-image: linear-gradient(#fff, #fff), linear-gradient(to right, #eee, #eee);
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+}
+.special-card:hover {
+    background-image: linear-gradient(#fff, #fff), linear-gradient(to right, #FF007A, #ff7eb3);
+}
+
+/* 3. 부드러운 배경 색상 */
+#daily-special {
+    background: linear-gradient(to bottom, #ffffff, #fff5f8);
+}        
     </style>
 </head>
 <body>
@@ -192,7 +226,7 @@
 
 <section id="daily-special">
     <div class="container">
-        <h2 style="margin-bottom:30px;">🔥 <span id="today-date" style="color:#FF007A;">00월 00일</span> 단 하루 특가폰 🔥</h2>
+        <h2 style="margin-bottom:30px;">🔥 <span id="today-date" style="color:#FF007A;">00월 00일</span> 마루모바일 특가폰 🔥</h2>
         
         <div class="special-container">
             <a href="#contact-form" class="special-card">
@@ -328,16 +362,30 @@
     <a href="tel:010-8080-3053" class="floating-cta">지금 바로 전화 상담하기 (클릭)</a>
 
     <script>
-        // 1. 인트로 닫기
-        function closeIntro() {
-            const intro = document.getElementById('intro-overlay');
-            intro.classList.add('hidden');
-            setTimeout(() => {
-                const video = document.getElementById('intro-video');
-                if (video) video.pause();
-                intro.style.display = 'none';
-            }, 500);
-        }
+// 인트로 닫기 기능 수정
+function closeIntro() {
+    const intro = document.getElementById('intro-overlay');
+    
+    // 1. 인트로 투명하게 만들기
+    intro.classList.add('hidden'); 
+    
+    // 2. [추가] 입장 버튼을 누르는 순간 즉시 페이지 최상단으로 강제 이동
+    window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'instant' // 부드러운 효과 없이 즉시 이동하여 위치 오류 방지
+    });
+    
+    // 3. 인트로가 사라진 후 리소스 정리
+    setTimeout(() => {
+        const video = document.getElementById('intro-video');
+        if (video) video.pause();
+        intro.style.display = 'none';
+        
+        // 혹시 모를 오차를 위해 제거 후 한 번 더 최상단 확인
+        document.documentElement.scrollTop = 0;
+    }, 500);
+}
 
         // 2. 날짜 자동 업데이트 (오늘 날짜 반영)
         function updateTodayDate() {
@@ -369,7 +417,13 @@
                 "desktopMessengerProps": { "yOffset": 30, "xOffset": 30 }
             }
         });
+
+        // 페이지가 처음 로드될 때 무조건 스크롤을 맨 위로 고정
+window.onbeforeunload = function () {
+    window.scrollTo(0, 0);
+};
     </script>
 </body>
 </html>
+
 
