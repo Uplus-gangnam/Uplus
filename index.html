@@ -5,6 +5,93 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LG유플러스 공식 파트너 주식회사 마루모바일</title>
     <style>
+/* 오늘의 특가 섹션 스타일 */
+#daily-special { background: #fff; padding: 60px 20px; }
+.special-card {
+    max-width: 800px;
+    margin: 0 auto;
+    border: 3px solid #FF007A;
+    border-radius: 25px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    transition: transform 0.3s ease;
+    background: #fff;
+    box-shadow: 0 10px 30px rgba(255, 0, 122, 0.1);
+}
+
+.special-card:hover { transform: scale(1.02); }
+
+.special-img {
+    flex: 1;
+    background: #f9f9f9;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.special-img img {
+    max-width: 100%;
+    height: auto;
+    max-height: 250px;
+    object-fit: contain;
+}
+
+.special-info {
+    flex: 1.2;
+    padding: 30px;
+    text-align: left;
+}
+
+.special-tag {
+    background: #FF007A;
+    color: white;
+    padding: 5px 12px;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.special-info h2 {
+    margin: 10px 0;
+    font-size: 1.8rem;
+    color: #333;
+}
+
+.special-price {
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: #FF007A;
+    margin: 15px 0;
+}
+
+.special-price span {
+    font-size: 1rem;
+    color: #888;
+    text-decoration: line-through;
+    margin-right: 10px;
+    font-weight: normal;
+}
+
+.special-btn {
+    background: #333;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    display: inline-block;
+    font-weight: bold;
+}
+
+/* 모바일 대응 */
+@media (max-width: 600px) {
+    .special-card { flex-direction: column; }
+    .special-info { text-align: center; }
+}
+        
       /* 7. U+ 고객 사전 등록 섹션 (강화 버전) */
 #qr-registration { background: #f9f9f9; padding: 80px 20px; }
 
@@ -190,12 +277,35 @@
                         url('https://i.ibb.co/fd9nKMPx/Gemini-Generated-Image-e3pgg7e3pgg7e3pg.png') 
                         no-repeat center/cover;
             color: white; 
-            padding: 120px 20px; /* 위아래 여백을 조금 더 주면 더 시원해 보입니다 */
+            padding: 80px 20px; /* 위아래 여백을 조금 더 주면 더 시원해 보입니다 */
             text-align: center;
         }
         header h1 { font-size: 2.5rem; margin-bottom: 10px; color: #FF007A; /* 유플러스 핑크 */ }
         header p { font-size: 1.2rem; }
 
+<section id="daily-special">
+    <div class="container">
+        <h2 style="margin-bottom:30px;">🔥 <span id="today-date" style="color:#FF007A;">00월 00일</span> 단 하루 특가폰 🔥</h2>
+        
+        <a href="#contact-form" class="special-card">
+            <div class="special-img">
+                <img src="https://i.ibb.co/zhkdh6Dp/17.png" alt="특가폰 이미지" id="special-phone-img">
+            </div>
+            
+            <div class="special-info">
+                <div class="special-tag">오늘만 이 가격!</div>
+                <h2 id="special-model-name">iPhone17 Pro</h2>
+                <p style="color:#666; margin:0;">마루모바일 단독 특가</p>
+                <div class="special-price">
+                    <span>1,698,400원</span> 실구매가 0원
+                </div>
+                <div class="special-btn">재고 확인 및 상담 신청 →</div>
+            </div>
+        </a>
+    </div>
+</section>
+
+        
         /* 2. 혜택 아이템 - 그림자 수정 및 호버 효과 */
         .benefit-item { 
             background: white; 
@@ -467,6 +577,19 @@
             }, 500);
         }
 
+// 날짜 자동 업데이트 함수
+function updateTodayDate() {
+    const now = new Date();
+    const month = (now.getMonth() + 1).toString().padStart(2, '0');
+    const day = now.getDate().toString().padStart(2, '0');
+    
+    const dateString = month + '월 ' + day + '일';
+    document.getElementById('today-date').innerText = dateString;
+}
+
+// 페이지 로드 시 날짜 업데이트 실행
+window.addEventListener('DOMContentLoaded', updateTodayDate);
+    
 document.getElementById('consultationForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const name = document.getElementById('userName').value;
@@ -496,6 +619,7 @@ document.getElementById('consultationForm').addEventListener('submit', function(
 </body>
 
 </html>
+
 
 
 
