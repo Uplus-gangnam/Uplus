@@ -317,11 +317,11 @@
             const msgBox = document.getElementById('form-message');
             const msgName = document.getElementById('msg-name');
 
-            const googleFormUrl = "https://docs.google.com/forms/d/e/YOUR_FORM_ID/formResponse";
+            const googleFormUrl = "https://docs.google.com/forms/d/e/1FAIpQLSdU5Q1Y6Y6rD1_6XW-p8W-K_B1k-7K_Y9J-X_z_X/formResponse";
             const formData = new FormData();
-            formData.append("entry.123456789", name); 
-            formData.append("entry.987654321", phone);
-            formData.append("entry.112233445", interest);
+formData.append("entry.1691889814", name);     // 성함
+formData.append("entry.724726551", phone);      // 연락처
+formData.append("entry.169055815", interest);   // 관심 상품
 
             msgName.innerText = name;
             msgBox.style.display = 'flex';
@@ -389,4 +389,5 @@
     </script>
 </body>
 </html>
+
 
